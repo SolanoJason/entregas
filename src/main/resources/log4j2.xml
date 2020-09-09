@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Configuración del log-->
+<Configuration status="WARN">
+    <Appenders>
+        <JDBC name="JDBCAppender" tableName="logs">
+            <DataSource jndiName="java:/comp/env/jdbc/LoggingDataSource"/>
+            <Column name="date" isEventTimestamp="true"/>
+            <Column name="logger" pattern="%logger"/>
+            <Column name="level" pattern="%level"/>
+            <Column name="message" pattern="%message"/>
+            <Column name="exception" pattern="%ex{full}"/>
+        </JDBC>
+    </Appenders>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} [%t] %highlight{%level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

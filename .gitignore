@@ -353,4 +353,4 @@ gradle-app.setting
 .idea/sonarlint/
 .idea/sqldialects.xml
 .idea/vcs.xml
-gradle/
+.idea/git_toolbox_prj.xml
