@@ -12,7 +12,7 @@ public class ConexionBaseDeDatos {
     private static Connection con = null;
 
     static {
-        String url = "jdbc:mysql://maria.db.arllk.com:43306/p3_estudiantes_equipos";
+        String url = "jdbc:mysql://maria.db.arllk.com:43306/mydb";
         String user = "root";
         String pass = "l33tsupah4x0r";
         try {

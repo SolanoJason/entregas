@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import sql.ConexionBaseDeDatos;
 
 import static sql.ConexionBaseDeDatos.getConnection;
 
@@ -16,6 +17,7 @@ import static sql.ConexionBaseDeDatos.getConnection;
  * @author Solano Jason
  */
 public class Control {
+
     public static final Connection connection = getConnection();
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
@@ -71,8 +73,25 @@ public class Control {
     }
 
     /**
+     * Rellena la lista con la consulta sql
+     */
+    public static void fillList(DefaultListModel lmd, String sql) {
+        try {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            lmd.removeAllElements();
+            while (rs.next()) {
+                lmd.addElement(rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            System.err.print(ex);
+        }
+    }
+
+    /**
      * @param sql comando SQL a ejecutar
-     * @return retorna una cadena con el valor de la primera columna de la primera fila
+     * @return retorna una cadena con el valor de la primera columna de la
+     * primera fila
      */
     public static String returnData(String sql) {
         String data = "";
@@ -87,32 +106,26 @@ public class Control {
         return data;
     }
 
-    /**
-     * El método isFieldEmpty recibe como argumento un array de JTextField y
-     * valida si todos están vacíos, de ser así retorna true y muestra un
-     * mensaje con todos campos que faltan rellenar. Es necesario usar el método
-     * setName para nombrar a los JTextField
-     *
-     * @author Solano Jason
-     * @version 1.0
-     * @since 2020-09-08
-     */
-    public static boolean isFieldEmpty(JTextField... field) {
-        boolean retornar = false;
-        StringBuilder mensaje = new StringBuilder();
-        for (int i = 0; i <= field.length - 1; i++) {
-            if (field[i].getText().trim().length() == 0) {
-                retornar = true;
-                if (mensaje.toString().equals("")) {
-                    mensaje.append(field[i].getName());
-                } else {
-                    mensaje.append(", ").append(field[i].getName());
-                }
-            }
+    public static boolean checkQuery(String sql) {
+        boolean check = false;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultset = statement.executeQuery(sql);
+            check = resultset.next();
+        } catch (SQLException ex) {
+            logger.atSevere().withStackTrace(StackSize.FULL).withCause(ex).log("Hubo un error en checkQuery");
         }
-        if (retornar) {
-            JOptionPane.showMessageDialog(null, mensaje + " faltan rellenar");
+        return check;
+    }
+
+    public static int updateTable(String sql) {
+        int rowsAffected=0;
+        try {
+            Statement statement = connection.createStatement();
+            rowsAffected = statement.executeUpdate(sql);
+        } catch (SQLException ex) {
+            logger.atSevere().withStackTrace(StackSize.FULL).withCause(ex).log("Hubo un error en updateTable");
         }
-        return retornar;
+        return rowsAffected;
     }
 }
