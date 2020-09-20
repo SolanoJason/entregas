@@ -7,11 +7,10 @@ package ventanas;
 
 import clases.Control;
 import clases.Validar;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import javax.swing.JOptionPane;
+
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.Objects;
 
 /**
  *
@@ -49,17 +48,14 @@ public class Escuela extends javax.swing.JFrame {
     public void addComboFacultad() {
         String sqlCombo = "select nombre from facultad";
         Control.fillCombo(comboFacultad, sqlCombo);
-        comboFacultad.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == 1) {
-                    String selectedFacultad = e.getItem().toString();
-                    String sqlTable = String.format("select e.nombre from escuela e inner join facultad f on"
-                            + " f.id=e.facultad_id where f.nombre = '%s'", selectedFacultad);
-                    System.out.println(sqlTable);
-                    Control.fillTable(md, sqlTable, 1);
-                    txBuscar.setEnabled(true);
-                }
+        comboFacultad.addItemListener(e -> {
+            if (e.getStateChange() == 1) {
+                String selectedFacultad = e.getItem().toString();
+                String sqlTable = String.format("select e.nombre from escuela e inner join facultad f on"
+                        + " f.id=e.facultad_id where f.nombre = '%s'", selectedFacultad);
+                System.out.println(sqlTable);
+                Control.fillTable(md, sqlTable, 1);
+                txBuscar.setEnabled(true);
             }
         });
     }
@@ -220,18 +216,18 @@ public class Escuela extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txEscuelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txEscuelaActionPerformed
-        // TODO add your handling code here:
+        // TODO TODO Añadir esta accion
     }//GEN-LAST:event_txEscuelaActionPerformed
 
     private void comboFacultadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFacultadActionPerformed
-        // TODO add your handling code here:
+        // TODO Añadir esta accion
     }//GEN-LAST:event_comboFacultadActionPerformed
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         if (comboFacultad.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(null, "Primero seleccione una facultad");
         } else {
-            /*Verificar si el txEscuela no est� vac�o ni formado por espacios*/
+            /*Verificar si el txEscuela no está vacío ni formado por espacios*/
             String escuela = txEscuela.getText();
             escuela = escuela.trim();
             if (escuela.length() == 0) {
@@ -241,7 +237,7 @@ public class Escuela extends javax.swing.JFrame {
                 boolean check = Control.checkQuery(sqlCheck);
                 System.out.println(sqlCheck + "  " + check);
                 if (check) {
-                    JOptionPane.showMessageDialog(null, "La escuela ya existe en est� u otra facultad");
+                    JOptionPane.showMessageDialog(null, "La escuela ya existe en está u otra facultad");
                 } else {
                     String facultad = comboFacultad.getSelectedItem().toString();
                     String sqlCrear = String.format("call registrar_escuela('%s','%s')", escuela, facultad);
@@ -255,57 +251,20 @@ public class Escuela extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void txBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txBuscarActionPerformed
-        // TODO add your handling code here:
+        // TODO Añadir esta accion
     }//GEN-LAST:event_txBuscarActionPerformed
 
     private void txBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txBuscarKeyTyped
-        // TODO add your handling code here:
         if (md.getRowCount() > 0) {
             int pos = txBuscar.getCaretPosition();
             System.out.println(pos);
             String nombre = (txBuscar.getText().substring(0, pos) + evt.getKeyChar() + txBuscar.getText().substring(pos)).trim();
-            String facultad = comboFacultad.getSelectedItem().toString();
+            String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
             String sqlFacultad = "select e.nombre from escuela e inner join facultad f on e.facultad_id=f.id "
                     + "where f.nombre='" + facultad + "' and e.nombre like '" + nombre + "%';";
             Control.fillTable(md, sqlFacultad, 1);
         }
     }//GEN-LAST:event_txBuscarKeyTyped
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Escuela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Escuela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Escuela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Escuela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Escuela().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

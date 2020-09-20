@@ -7,9 +7,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConexionBaseDeDatos {
+public final class ConexionBaseDeDatos {
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
-    private static Connection con = null;
+    private static Connection con;
 
     static {
         String url = "jdbc:mysql://maria.db.arllk.com:43306/mydb";

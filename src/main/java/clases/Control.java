@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import sql.ConexionBaseDeDatos;
 
 import static sql.ConexionBaseDeDatos.getConnection;
 
@@ -75,13 +74,13 @@ public class Control {
     /**
      * Rellena la lista con la consulta sql
      */
-    public static void fillList(DefaultListModel lmd, String sql) {
+    public static void fillList(DefaultListModel listModel, String sql) {
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            lmd.removeAllElements();
+            listModel.removeAllElements();
             while (rs.next()) {
-                lmd.addElement(rs.getString(1));
+                listModel.addElement(rs.getString(1));
             }
         } catch (SQLException ex) {
             System.err.print(ex);

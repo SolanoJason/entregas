@@ -1,7 +1,7 @@
 plugins {
     java
     application
-    id("com.github.ben-manes.versions") version "0.31.0"
+    id("com.github.ben-manes.versions") version "0.33.0"
 }
 
 java {
@@ -9,13 +9,19 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+tasks.compileJava {
+    options.isIncremental = true
+    options.isWarnings = true
+    options.isFailOnError = true
+}
+
 // Aca indicamos la ubicación del main
 application {
     applicationName = "Proyecto en aula Programación 3"
-    mainClassName = "ventanas.Facultad"
+    mainClassName = "ventanas.Menu"
 }
 
-group = "com.grupouno"
+group = "com.grupodos"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -34,9 +40,18 @@ dependencies {
 
     //Para el skin, hay un montón de skins para escoger
     // https://github.com/JFormDesigner/FlatLaf/tree/master/flatlaf-intellij-themes#themes
-    implementation("com.formdev", "flatlaf", "0.41")
-    implementation("com.formdev", "flatlaf-intellij-themes", "0.41")
+    implementation("com.formdev", "flatlaf", "0.42")
+    implementation("com.formdev", "flatlaf-intellij-themes", "0.42")
+
+    //Hace posible (y no llorar sangre) escribir interfaces graficas a mano
+    implementation("com.miglayout", "miglayout-core", "5.2")
+    implementation("com.miglayout", "miglayout-swing", "5.2")
 
     //Conector para mysql
     implementation("mysql", "mysql-connector-java", "8.0.21")
+
+    //Guava
+    //Porque guava?
+    // https://github.com/google/guava/wiki
+    implementation("com.google.guava", "guava", "29.0-jre")
 }
