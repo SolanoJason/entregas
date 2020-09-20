@@ -10,31 +10,35 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import static sql.ConexionBaseDeDatos.getConnection;
 
 /**
  * @author Solano Jason
  */
-public class Control {
+public enum Control {
+    ;
 
     public static final Connection connection = getConnection();
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+
 
     /**
      * El método fillCombo rellena el combo dado con la primera columna de la
      * resulta obtenida del String sql
      *
      * @author Solano Jason
-     * @version 1.0
+     * El tag @version se usa normalmente en APIs o librerias, en caso de una aplicacion no aplican normalmente
+     * // @version 1.0
      * @since 2020-09-08
      */
     public static void fillCombo(JComboBox<String> comboBox, String sql) {
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            comboBox.removeAllItems();
-            while (resultSet.next()) {
-                comboBox.addItem(resultSet.getString(1));
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                comboBox.removeAllItems();
+                while (resultSet.next()) {
+                    comboBox.addItem(resultSet.getString(1));
+                }
             }
         } catch (SQLException ex) {
             logger.atSevere().withStackTrace(StackSize.FULL).withCause(ex).log("Hubo un error al intentar llenar el ComboBox");
@@ -56,15 +60,15 @@ public class Control {
      */
     public static void fillTable(DefaultTableModel tableModel, String sql, int n) {
         limTable(tableModel);
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            String[] data = new String[n];
-            while (resultSet.next()) {
-                for (int i = 0; i <= n - 1; i++) {
-                    data[i] = resultSet.getString(i + 1);
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                String[] data = new String[n];
+                while (resultSet.next()) {
+                    for (int i = 0; i <= n - 1; i++) {
+                        data[i] = resultSet.getString(i + 1);
+                    }
+                    tableModel.addRow(data);
                 }
-                tableModel.addRow(data);
             }
         } catch (SQLException ex) {
             logger.atSevere().withStackTrace(StackSize.FULL).withCause(ex).log("Hubo un error al intentar llenar la tabla");
@@ -74,16 +78,16 @@ public class Control {
     /**
      * Rellena la lista con la consulta sql
      */
-    public static void fillList(DefaultListModel lmd, String sql) {
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            lmd.removeAllElements();
-            while (rs.next()) {
-                lmd.addElement(rs.getString(1));
+    public static void fillList(DefaultListModel<String> listModel, String sql) {
+        try (Statement st = connection.createStatement()) {
+            try (ResultSet rs = st.executeQuery(sql)) {
+                listModel.removeAllElements();
+                while (rs.next()) {
+                    listModel.addElement(rs.getString(1));
+                }
             }
         } catch (SQLException ex) {
-            System.err.print(ex);
+            logger.atSevere().withStackTrace(StackSize.FULL).withCause(ex).log("Hubo un error al llenar la lista con comando SQL: %s", sql);
         }
     }
 
@@ -94,11 +98,11 @@ public class Control {
      */
     public static String returnData(String sql) {
         String data = "";
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            resultSet.next();
-            data = resultSet.getString(1);
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(sql)) {
+                resultSet.next();
+                data = resultSet.getString(1);
+            }
         } catch (SQLException ex) {
             logger.atSevere().withStackTrace(StackSize.FULL).withCause(ex).log("Hubo un error en returnData");
         }
@@ -107,10 +111,10 @@ public class Control {
 
     public static boolean checkQuery(String sql) {
         boolean check = false;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultset = statement.executeQuery(sql);
-            check = resultset.next();
+        try (Statement statement = connection.createStatement()) {
+            try (ResultSet resultset = statement.executeQuery(sql)) {
+                check = resultset.next();
+            }
         } catch (SQLException ex) {
             logger.atSevere().withStackTrace(StackSize.FULL).withCause(ex).log("Hubo un error en checkQuery");
         }
@@ -119,8 +123,13 @@ public class Control {
 
     public static int updateTable(String sql) {
         int rowsAffected = 0;
-        try {
-            Statement statement = connection.createStatement();
+
+
+        // Un try with resources, el problema de que ocurra una exception en esta function es que la connexion
+        // sera creada y no podrá ser recogida por el garbage collector, lo cual genera un memory leak
+        // El try with resources en caso de una exception va a cerrar automáticamente la connexion y no se producirá
+        // el memory leak
+        try (Statement statement = connection.createStatement()) {
             rowsAffected = statement.executeUpdate(sql);
         } catch (SQLException ex) {
             logger.atSevere().withStackTrace(StackSize.FULL).withCause(ex).log("Hubo un error en updateTable");

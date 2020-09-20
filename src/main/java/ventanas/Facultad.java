@@ -1,5 +1,6 @@
 package ventanas;
 
+
 import clases.Control;
 import clases.Validar;
 import java.awt.Rectangle;
@@ -13,10 +14,12 @@ import javax.swing.event.TableModelListener;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 /**
  *
  * @author LENOVO
  */
+@SuppressWarnings({"FieldCanBeLocal", "RedundantSuppression"})
 public class Facultad extends javax.swing.JFrame {
 
     /**
@@ -248,6 +251,7 @@ public class Facultad extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void btnCrear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrear1ActionPerformed
         // TODO add your handling code here:
         String facu = txFacultad.getText().trim();
@@ -419,6 +423,7 @@ public class Facultad extends javax.swing.JFrame {
             }
         });
     }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,0 +1,34 @@
+JFDML JFormDesigner: "7.0.2.6.321" Java: "11.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "fill,insets 15,hidemode 3,align center center"
+			"$columnConstraints": "[grow,sizegroup 1,fill][grow,sizegroup 1,fill][grow,sizegroup 1,fill]"
+			"$rowConstraints": "[grow,sizegroup 1,fill][grow,sizegroup 1,fill][grow,sizegroup 1,fill]"
+		} ) {
+			name: "this"
+			"title": "Menú grupo 2"
+			"minimumSize": new java.awt.Dimension( 600, 600 )
+			"visible": true
+			"defaultCloseOperation": 2
+			"$locationPolicy": 1
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "buttonEscuela"
+				"text": "Escuela"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "buttonFacultad"
+				"text": "Facultad"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 400, 300 )
+		} )
+	}
+}
