@@ -10,12 +10,14 @@ import clases.Validar;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ItemEvent;
 import java.util.Objects;
 
 /**
  *
  * @author Pajas
  */
+@SuppressWarnings({"RedundantSuppression", "FieldCanBeLocal"})
 public class Escuela extends javax.swing.JFrame {
 
     /**
@@ -49,7 +51,7 @@ public class Escuela extends javax.swing.JFrame {
         String sqlCombo = "select nombre from facultad";
         Control.fillCombo(comboFacultad, sqlCombo);
         comboFacultad.addItemListener(e -> {
-            if (e.getStateChange() == 1) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedFacultad = e.getItem().toString();
                 String sqlTable = String.format("select e.nombre from escuela e inner join facultad f on"
                         + " f.id=e.facultad_id where f.nombre = '%s'", selectedFacultad);
@@ -90,26 +92,14 @@ public class Escuela extends javax.swing.JFrame {
 
         jLabel2.setText("Escuela:");
 
-        txEscuela.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txEscuelaActionPerformed(evt);
-            }
-        });
+        txEscuela.addActionListener(this::txEscuelaActionPerformed);
 
         jLabel3.setText("Facultad:");
 
-        comboFacultad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboFacultadActionPerformed(evt);
-            }
-        });
+        comboFacultad.addActionListener(this::comboFacultadActionPerformed);
 
         btnCrear.setText("Crear");
-        btnCrear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCrearActionPerformed(evt);
-            }
-        });
+        btnCrear.addActionListener(this::btnCrearActionPerformed);
 
         btnEditar.setText("Editar");
 
@@ -121,12 +111,9 @@ public class Escuela extends javax.swing.JFrame {
 
         jLabel4.setText("Buscar:");
 
-        txBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txBuscarActionPerformed(evt);
-            }
-        });
+        txBuscar.addActionListener(this::txBuscarActionPerformed);
         txBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txBuscarKeyTyped(evt);
             }
@@ -239,7 +226,7 @@ public class Escuela extends javax.swing.JFrame {
                 if (check) {
                     JOptionPane.showMessageDialog(null, "La escuela ya existe en está u otra facultad");
                 } else {
-                    String facultad = comboFacultad.getSelectedItem().toString();
+                    String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
                     String sqlCrear = String.format("call registrar_escuela('%s','%s')", escuela, facultad);
                     Control.updateTable(sqlCrear);
                     String sqlFacultad = String.format("select e.nombre from escuela e inner join facultad f on e.facultad_id=f.id "

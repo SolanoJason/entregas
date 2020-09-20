@@ -4,6 +4,7 @@ package ventanas;
  *
  * @author Pajas
  */
+@SuppressWarnings({"FieldCanBeLocal", "RedundantSuppression"})
 public class Facultad extends javax.swing.JFrame {
 
     /**
