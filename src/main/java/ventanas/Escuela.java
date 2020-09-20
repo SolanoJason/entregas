@@ -116,8 +116,18 @@ public class Escuela extends javax.swing.JFrame {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
 
@@ -185,7 +195,7 @@ public class Escuela extends javax.swing.JFrame {
                                 .addComponent(btnEliminar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnSalir)))))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,7 +241,7 @@ public class Escuela extends javax.swing.JFrame {
         if (comboFacultad.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(null, "Primero seleccione una facultad");
         } else {
-            /*Verificar si el txEscuela no está vacío ni formado por espacios*/
+            /*Verificar si el txEscuela no estï¿½ vacï¿½o ni formado por espacios*/
             String escuela = txEscuela.getText();
             escuela = escuela.trim();
             if (escuela.length() == 0) {
@@ -241,7 +251,7 @@ public class Escuela extends javax.swing.JFrame {
                 boolean check = Control.checkQuery(sqlCheck);
                 System.out.println(sqlCheck + "  " + check);
                 if (check) {
-                    JOptionPane.showMessageDialog(null, "La escuela ya existe en está u otra facultad");
+                    JOptionPane.showMessageDialog(null, "La escuela ya existe en estï¿½ u otra facultad");
                 } else {
                     String facultad = comboFacultad.getSelectedItem().toString();
                     String sqlCrear = String.format("call registrar_escuela('%s','%s')", escuela, facultad);
@@ -270,6 +280,14 @@ public class Escuela extends javax.swing.JFrame {
             Control.fillTable(md, sqlFacultad, 1);
         }
     }//GEN-LAST:event_txBuscarKeyTyped
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments

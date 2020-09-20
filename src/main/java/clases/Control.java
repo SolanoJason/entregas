@@ -7,10 +7,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import sql.ConexionBaseDeDatos;
-
 import static sql.ConexionBaseDeDatos.getConnection;
 
 /**
@@ -119,7 +118,7 @@ public class Control {
     }
 
     public static int updateTable(String sql) {
-        int rowsAffected=0;
+        int rowsAffected = 0;
         try {
             Statement statement = connection.createStatement();
             rowsAffected = statement.executeUpdate(sql);
@@ -127,5 +126,62 @@ public class Control {
             logger.atSevere().withStackTrace(StackSize.FULL).withCause(ex).log("Hubo un error en updateTable");
         }
         return rowsAffected;
+    }
+
+    public static void fillTable2(JTable tabla, String sql) {
+
+        try {
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            int cantidadFila = llenarEncabezadoTabla(tabla, resultSet);
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            limTable(modelo);
+            Object[] fila = new Object[cantidadFila];
+
+            while (resultSet.next()) {
+                for (int i = 0; i < cantidadFila; i++) {
+
+                    fila[i] = resultSet.getString(i + 1);
+
+                }
+
+                modelo.addRow(fila);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static int llenarEncabezadoTabla(JTable tabla, ResultSet res) {
+        String[] cabecera;
+        ResultSetMetaData meta;
+        int cant = 0;
+        try {
+            meta = res.getMetaData();
+            cant = meta.getColumnCount();
+            cabecera = new String[cant];
+            int i = 0;
+
+            //bucle para obtener el nombre de las columnas de los registros
+            for (i = i; i < cant; i++) {
+                cabecera[i] = meta.getColumnName(i + 1);
+            }
+
+            tabla.setModel(new DefaultTableModel(new Object[][]{}, cabecera) {
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return false;
+                }
+            });
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return cant;
+
     }
 }
