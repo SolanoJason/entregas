@@ -11,6 +11,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,6 +26,8 @@ public class Escuela extends javax.swing.JFrame {
      * Creates new form Facultad
      */
     DefaultTableModel md;
+    String modo = "";
+    int celda = -1;
 
     public Escuela() {
         initComponents();
@@ -36,14 +41,23 @@ public class Escuela extends javax.swing.JFrame {
         setTitle("Datos de la escuela");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         Validar.textField(txBuscar);
-        Validar.textField(txEscuela);
         txBuscar.setEnabled(false);
+        btnCancelar.setEnabled(false);
     }
 
     public void addTable() {
-        md = new DefaultTableModel();
+        md = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if (row == celda) {
+                    return true;
+                }
+                return false;
+            }
+        };
         md.setColumnIdentifiers(new String[]{"Escuelas"});
         tbEscuelas.setModel(md);
+        tbEscuelas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     public void addComboFacultad() {
@@ -74,8 +88,6 @@ public class Escuela extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txEscuela = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         comboFacultad = new javax.swing.JComboBox<>();
         btnCrear = new javax.swing.JButton();
@@ -91,14 +103,6 @@ public class Escuela extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Datos de la escuela:");
-
-        jLabel2.setText("Escuela:");
-
-        txEscuela.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txEscuelaActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Facultad:");
 
@@ -116,8 +120,18 @@ public class Escuela extends javax.swing.JFrame {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
 
@@ -162,13 +176,9 @@ public class Escuela extends javax.swing.JFrame {
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
+                                .addComponent(jLabel3)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txEscuela, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-                                    .addComponent(comboFacultad, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(comboFacultad, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
@@ -185,18 +195,14 @@ public class Escuela extends javax.swing.JFrame {
                                 .addComponent(btnEliminar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnSalir)))))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txEscuela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(comboFacultad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -213,15 +219,11 @@ public class Escuela extends javax.swing.JFrame {
                     .addComponent(txBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txEscuelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txEscuelaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txEscuelaActionPerformed
 
     private void comboFacultadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFacultadActionPerformed
         // TODO add your handling code here:
@@ -232,23 +234,25 @@ public class Escuela extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Primero seleccione una facultad");
         } else {
             /*Verificar si el txEscuela no está vacío ni formado por espacios*/
-            String escuela = txEscuela.getText();
-            escuela = escuela.trim();
-            if (escuela.length() == 0) {
-                JOptionPane.showMessageDialog(null, "Rellene la escuela correctamente");
-            } else {
-                String sqlCheck = String.format("select * from escuela where nombre='%s'", escuela);
-                boolean check = Control.checkQuery(sqlCheck);
-                System.out.println(sqlCheck + "  " + check);
-                if (check) {
-                    JOptionPane.showMessageDialog(null, "La escuela ya existe en está u otra facultad");
+            String escuela = JOptionPane.showInputDialog("Ingrese la escuela");
+            if (escuela != null) {
+                escuela = escuela.trim();
+                if (escuela.length() == 0) {
+                    JOptionPane.showMessageDialog(null, "Rellene la escuela correctamente");
                 } else {
-                    String facultad = comboFacultad.getSelectedItem().toString();
-                    String sqlCrear = String.format("call registrar_escuela('%s','%s')", escuela, facultad);
-                    Control.updateTable(sqlCrear);
-                    String sqlFacultad = String.format("select e.nombre from escuela e inner join facultad f on e.facultad_id=f.id "
-                            + "where f.nombre='%s'", facultad);
-                    Control.fillTable(md, sqlFacultad, 1);
+                    String sqlCheck = String.format("select * from escuela where nombre='%s'", escuela);
+                    boolean check = Control.checkQuery(sqlCheck);
+                    System.out.println(sqlCheck + "  " + check);
+                    if (check) {
+                        JOptionPane.showMessageDialog(null, "La escuela ya existe en está u otra facultad");
+                    } else {
+                        String facultad = comboFacultad.getSelectedItem().toString();
+                        String sqlCrear = String.format("call registrar_escuela('%s','%s')", escuela, facultad);
+                        Control.updateTable(sqlCrear);
+                        String sqlFacultad = String.format("select e.nombre from escuela e inner join facultad f on e.facultad_id=f.id "
+                                + "where f.nombre='%s'", facultad);
+                        Control.fillTable(md, sqlFacultad, 1);
+                    }
                 }
             }
         }
@@ -270,6 +274,67 @@ public class Escuela extends javax.swing.JFrame {
             Control.fillTable(md, sqlFacultad, 1);
         }
     }//GEN-LAST:event_txBuscarKeyTyped
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        /*Validar si una facultad está seleccionada*/
+        String oldEscuela = "";
+        if (btnEditar.getText().equals("Editar")) {
+            if (comboFacultad.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(null, "Primero seleccione una facultad");
+                /*Validar si una escuela de la tabla está seleccionada*/
+            } else if (tbEscuelas.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(null, "Primero seleccione una escuela");
+            } else {
+                /*Modo edicion*/
+                btnCrear.setEnabled(false);
+                btnCancelar.setEnabled(true);
+                btnEliminar.setEnabled(false);
+                btnEditar.setText("Aceptar");
+                celda = tbEscuelas.getSelectedRow();
+                tbEscuelas.editCellAt(celda, 0);
+            }
+        } else if (btnEditar.getText().equals("Aceptar")) {
+            oldEscuela = tbEscuelas.getValueAt(celda, 0).toString();
+            tbEscuelas.editCellAt(-1, 0);
+            String escuela = tbEscuelas.getValueAt(celda, 0).toString().trim();
+            /*Verificar si la escuela no es vacia*/
+            if (escuela.length() == 0) {
+                JOptionPane.showMessageDialog(null, "Valor no valido");
+                /*Verificar si la escuela ya existe*/
+            } else {
+                String sqlgetId = String.format("select getIdEscuela('%s')", escuela);
+                String idEscuela = Control.returnData(sqlgetId);
+                if (!idEscuela.equals("0")) {
+                    JOptionPane.showMessageDialog(null, "Esa escuela ya existe");
+                    tbEscuelas.editCellAt(celda, 0);
+                } else {
+                    System.out.println("oldescuela:" + oldEscuela);
+                    sqlgetId = String.format("select getIdEscuela('%s')", oldEscuela);
+                    idEscuela = Control.returnData(sqlgetId);
+                    String sqlUpdateEscuela = String.format("update escuela set nombre='%s' where id = '%s'", escuela, idEscuela);
+                    Control.updateTable(sqlUpdateEscuela);
+                    btnCrear.setEnabled(true);
+                    btnCancelar.setEnabled(false);
+                    btnEliminar.setEnabled(true);
+                    btnEditar.setText("Editar");
+                    celda = -1;
+                }
+            }
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        Object oldEscuela = tbEscuelas.getValueAt(celda, 0);
+        tbEscuelas.editCellAt(-1, 0);
+        tbEscuelas.setValueAt(oldEscuela, celda, 0);
+        btnCrear.setEnabled(true);
+        btnCancelar.setEnabled(false);
+        btnEliminar.setEnabled(true);
+        btnEditar.setText("Editar");
+        celda = -1;
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -315,12 +380,10 @@ public class Escuela extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox<String> comboFacultad;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbEscuelas;
     private javax.swing.JTextField txBuscar;
-    private javax.swing.JTextField txEscuela;
     // End of variables declaration//GEN-END:variables
 }
