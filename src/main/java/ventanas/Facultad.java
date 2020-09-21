@@ -1,5 +1,14 @@
 package ventanas;
 
+
+import clases.Control;
+import clases.Validar;
+import java.awt.Rectangle;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,8 +17,9 @@ package ventanas;
 
 /**
  *
- * @author Pajas
+ * @author LENOVO
  */
+@SuppressWarnings({"FieldCanBeLocal", "RedundantSuppression"})
 public class Facultad extends javax.swing.JFrame {
 
     /**
@@ -17,6 +27,25 @@ public class Facultad extends javax.swing.JFrame {
      */
     public Facultad() {
         initComponents();
+        setLocationRelativeTo(null);
+        Validar.textField(txFacultad);
+
+        String sql = "select * from facultad order by nombre";
+        llenarTablita();
+
+    }
+
+    private void llenarTablita() {
+        if (txBuscar.getText().trim().length() != 0) {
+            String sql = "select * from facultad where nombre like'%" + txBuscar.getText().trim() + "%'";
+            Control.fillTable2(tbFacultad, sql);
+            lb_info.setText("mostrando las coincidencias con : " + txBuscar.getText().trim());
+
+        } else {
+            String sql = "select * from facultad";
+            Control.fillTable2(tbFacultad, sql);
+            lb_info.setText("mostrando todos los registros");
+        }
     }
 
     /**
@@ -28,36 +57,25 @@ public class Facultad extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txFacultad = new javax.swing.JTextField();
-        btnEditar = new javax.swing.JButton();
-        btnCrear1 = new javax.swing.JButton();
-        btnSalir = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        txBuscar = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbFacultad = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        txBuscar = new javax.swing.JTextField();
+        lb_info = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        txFacultad = new javax.swing.JTextField();
+        btnCrear1 = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Datos de la facultad");
-
-        jLabel2.setText("Facultad:");
-
-        btnEditar.setText("Editar");
-
-        btnCrear1.setText("Crear");
-
-        btnSalir.setText("Salir");
-
-        btnCancelar.setText("Cancelar");
-
-        btnEliminar.setText("Eliminar");
-
-        jLabel3.setText("Buscar:");
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("busqueda con palabras claves"));
+        jPanel2.setEnabled(false);
 
         tbFacultad.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -70,69 +88,306 @@ public class Facultad extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbFacultad.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tbFacultadMousePressed(evt);
+            }
+        });
+        tbFacultad.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                tbFacultadPropertyChange(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbFacultad);
+
+        jLabel3.setText("Buscar:");
+
+        txBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txBuscarKeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(txBuscar))
+                    .addComponent(lb_info, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
+                .addComponent(lb_info, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("datos de la facultad"));
+
+        jLabel2.setText("Facultad:");
+
+        txFacultad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txFacultadKeyReleased(evt);
+            }
+        });
+
+        btnCrear1.setText("Crear");
+        btnCrear1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrear1ActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setEnabled(false);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.setEnabled(false);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(btnCrear1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEditar)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnCancelar)
+                        .addGap(33, 33, 33)
+                        .addComponent(btnEliminar)
+                        .addGap(34, 34, 34)
+                        .addComponent(btnSalir))
+                    .addComponent(txFacultad, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txFacultad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCrear1)
+                    .addComponent(btnEditar)
+                    .addComponent(btnCancelar)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnSalir))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(232, 232, 232)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(btnCrear1)
-                        .addGap(22, 22, 22)
-                        .addComponent(btnEditar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEliminar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSalir))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(31, 31, 31)
-                                .addComponent(txBuscar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(txFacultad, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txFacultad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEditar)
-                    .addComponent(btnCancelar)
-                    .addComponent(btnEliminar)
-                    .addComponent(btnSalir)
-                    .addComponent(btnCrear1))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+
+    private void btnCrear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrear1ActionPerformed
+        // TODO add your handling code here:
+        String facu = txFacultad.getText().trim();
+        if (facu.length() != 0) {
+            String sqCheck = String.format("select id from facultad where nombre='%s'", facu);
+            if (!Control.checkQuery(sqCheck)) {
+                String sql = String.format(" call registrar_facultad('%s')", facu);
+                Control.updateTable(sql);
+                JOptionPane.showMessageDialog(btnCrear1, "se ingresó correctamente a la base de datos");
+                llenarTablita();
+            } else {
+                JOptionPane.showMessageDialog(btnCrear1, "la facultad ya se encuentra registrada\nintente de nuevo", "alerta", JOptionPane.WARNING_MESSAGE);
+
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(btnCrear1, "rellene el campo facultad por favor", "alerta", JOptionPane.WARNING_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_btnCrear1ActionPerformed
+
+    private void tbFacultadMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbFacultadMousePressed
+        // TODO add your handling code here:
+
+        txFacultad.setText(tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 1).toString());
+        if (tbFacultad.getSelectedRowCount() != 0) {
+            btnEditar.setEnabled(true);
+            btnCancelar.setEnabled(true);
+            btnEliminar.setEnabled(true);
+        } else {
+            btnEditar.setEnabled(false);
+            btnCancelar.setEnabled(false);
+            btnEliminar.setEnabled(false);
+        }
+
+    }//GEN-LAST:event_tbFacultadMousePressed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        if (tbFacultad.getSelectedRowCount() == 1) {
+            if (txFacultad.getText().trim().length() != 0) {
+                String sqlCheck = String.format("select id from facultad where  nombre='%s'", txFacultad.getText().trim());
+                if (!Control.checkQuery(sqlCheck)) {
+                    if (JOptionPane.showConfirmDialog(btnEditar, "desea actualizar la facultad " + tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 1) + " por :\n " + txFacultad.getText().trim()) == 0) {
+                        String sql = String.format(" call editar_facultad('%s','%s')", txFacultad.getText().trim(), tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 1).toString());
+                        Control.updateTable(sql);
+                        JOptionPane.showMessageDialog(btnEditar, "se  actualizo correctamente");
+                        llenarTablita();
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(btnEditar, "la facultad ya se encuentra registrada\nintente de nuevo", "alerta", JOptionPane.WARNING_MESSAGE);
+
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(btnEditar, "rellene el campo facultad por favor", "alerta", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(btnEditar, "seleccione la fila que quiere actualizar", "alerta", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        if (tbFacultad.getSelectedRowCount() != 0) {
+            if (JOptionPane.showConfirmDialog(btnEditar, "desea eliminar la facultad :\n" + tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 1)) == 0) {
+
+                String sql_cheCheck = String.format("select  escuela.id from escuela inner join facultad on facultad.id =escuela.facultad_id where facultad.id=%s", tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 0).toString());
+                if (!Control.checkQuery(sql_cheCheck)) {
+                    String sql = String.format("delete from facultad where id =%s", tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 0).toString());
+                    Control.updateTable(sql);
+                    JOptionPane.showMessageDialog(btnEliminar, "se elimino correctamente");
+                    llenarTablita();
+                } else {
+                    JOptionPane.showMessageDialog(btnEliminar, "la facultad que desea eliminar tiene referencias con las escuelas,\nprimero elimine sus escuelas para eliminar esta facultad ",
+                            "alerta", JOptionPane.WARNING_MESSAGE);
+                }
+
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(btnEliminar, "seleccione la fila que quiere eliminar", "alerta", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        // TODO add your handling code here:
+        if(JOptionPane.showConfirmDialog(btnSalir, "¿desea abandonar programa?")==0){
+            System.exit(0);
+        }
+        
+
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        tbFacultad.getSelectionModel().removeSelectionInterval(0, tbFacultad.getRowCount());
+        txFacultad.setText("");
+
+        if (tbFacultad.getSelectedRowCount() != 0) {
+            btnEditar.setEnabled(true);
+            btnCancelar.setEnabled(true);
+            btnEliminar.setEnabled(true);
+        } else {
+            btnEditar.setEnabled(false);
+            btnCancelar.setEnabled(false);
+            btnEliminar.setEnabled(false);
+        }
+
+
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txFacultadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txFacultadKeyReleased
+        // TODO add your handling code here
+    }//GEN-LAST:event_txFacultadKeyReleased
+
+    private void txBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txBuscarKeyReleased
+        // TODO add your handling code here:
+        llenarTablita();
+    }//GEN-LAST:event_txBuscarKeyReleased
+
+    private void tbFacultadPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tbFacultadPropertyChange
+        // TODO add your handling code here:
+
+        if (tbFacultad.getSelectedRowCount() != 0) {
+            btnEditar.setEnabled(true);
+            btnCancelar.setEnabled(true);
+            btnEliminar.setEnabled(true);
+        } else {
+            btnEditar.setEnabled(false);
+            btnCancelar.setEnabled(false);
+            btnEliminar.setEnabled(false);
+        }
+    }//GEN-LAST:event_tbFacultadPropertyChange
 
     /**
      * @param args the command line arguments
@@ -169,16 +424,20 @@ public class Facultad extends javax.swing.JFrame {
         });
     }
 
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCrear1;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lb_info;
     private javax.swing.JTable tbFacultad;
     private javax.swing.JTextField txBuscar;
     private javax.swing.JTextField txFacultad;

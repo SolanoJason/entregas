@@ -7,6 +7,7 @@ package ventanas;
 
 import clases.Control;
 import clases.Validar;
+<<<<<<< HEAD
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -14,12 +15,19 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+=======
+
+import javax.swing.*;
+>>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ItemEvent;
+import java.util.Objects;
 
 /**
  *
  * @author Pajas
  */
+@SuppressWarnings({"RedundantSuppression", "FieldCanBeLocal"})
 public class Escuela extends javax.swing.JFrame {
 
     /**
@@ -63,17 +71,14 @@ public class Escuela extends javax.swing.JFrame {
     public void addComboFacultad() {
         String sqlCombo = "select nombre from facultad";
         Control.fillCombo(comboFacultad, sqlCombo);
-        comboFacultad.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == 1) {
-                    String selectedFacultad = e.getItem().toString();
-                    String sqlTable = String.format("select e.nombre from escuela e inner join facultad f on"
-                            + " f.id=e.facultad_id where f.nombre = '%s'", selectedFacultad);
-                    System.out.println(sqlTable);
-                    Control.fillTable(md, sqlTable, 1);
-                    txBuscar.setEnabled(true);
-                }
+        comboFacultad.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String selectedFacultad = e.getItem().toString();
+                String sqlTable = String.format("select e.nombre from escuela e inner join facultad f on"
+                        + " f.id=e.facultad_id where f.nombre = '%s'", selectedFacultad);
+                System.out.println(sqlTable);
+                Control.fillTable(md, sqlTable, 1);
+                txBuscar.setEnabled(true);
             }
         });
     }
@@ -104,20 +109,19 @@ public class Escuela extends javax.swing.JFrame {
 
         jLabel1.setText("Datos de la escuela:");
 
+<<<<<<< HEAD
+=======
+        jLabel2.setText("Escuela:");
+
+        txEscuela.addActionListener(this::txEscuelaActionPerformed);
+
+>>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
         jLabel3.setText("Facultad:");
 
-        comboFacultad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboFacultadActionPerformed(evt);
-            }
-        });
+        comboFacultad.addActionListener(this::comboFacultadActionPerformed);
 
         btnCrear.setText("Crear");
-        btnCrear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCrearActionPerformed(evt);
-            }
-        });
+        btnCrear.addActionListener(this::btnCrearActionPerformed);
 
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -139,12 +143,9 @@ public class Escuela extends javax.swing.JFrame {
 
         jLabel4.setText("Buscar:");
 
-        txBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txBuscarActionPerformed(evt);
-            }
-        });
+        txBuscar.addActionListener(this::txBuscarActionPerformed);
         txBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txBuscarKeyTyped(evt);
             }
@@ -225,14 +226,22 @@ public class Escuela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< HEAD
+=======
+    private void txEscuelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txEscuelaActionPerformed
+        // TODO TODO Añadir esta accion
+    }//GEN-LAST:event_txEscuelaActionPerformed
+
+>>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
     private void comboFacultadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFacultadActionPerformed
-        // TODO add your handling code here:
+        // TODO Añadir esta accion
     }//GEN-LAST:event_comboFacultadActionPerformed
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         if (comboFacultad.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(null, "Primero seleccione una facultad");
         } else {
+<<<<<<< HEAD
             /*Verificar si el txEscuela no est� vac�o ni formado por espacios*/
             String escuela = JOptionPane.showInputDialog("Ingrese la escuela");
             if (escuela != null) {
@@ -253,28 +262,48 @@ public class Escuela extends javax.swing.JFrame {
                                 + "where f.nombre='%s'", facultad);
                         Control.fillTable(md, sqlFacultad, 1);
                     }
+=======
+            /*Verificar si el txEscuela no está vacío ni formado por espacios*/
+            String escuela = txEscuela.getText();
+            escuela = escuela.trim();
+            if (escuela.length() == 0) {
+                JOptionPane.showMessageDialog(null, "Rellene la escuela correctamente");
+            } else {
+                String sqlCheck = String.format("select * from escuela where nombre='%s'", escuela);
+                boolean check = Control.checkQuery(sqlCheck);
+                System.out.println(sqlCheck + "  " + check);
+                if (check) {
+                    JOptionPane.showMessageDialog(null, "La escuela ya existe en está u otra facultad");
+                } else {
+                    String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
+                    String sqlCrear = String.format("call registrar_escuela('%s','%s')", escuela, facultad);
+                    Control.updateTable(sqlCrear);
+                    String sqlFacultad = String.format("select e.nombre from escuela e inner join facultad f on e.facultad_id=f.id "
+                            + "where f.nombre='%s'", facultad);
+                    Control.fillTable(md, sqlFacultad, 1);
+>>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
                 }
             }
         }
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void txBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txBuscarActionPerformed
-        // TODO add your handling code here:
+        // TODO Añadir esta accion
     }//GEN-LAST:event_txBuscarActionPerformed
 
     private void txBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txBuscarKeyTyped
-        // TODO add your handling code here:
         if (md.getRowCount() > 0) {
             int pos = txBuscar.getCaretPosition();
             System.out.println(pos);
             String nombre = (txBuscar.getText().substring(0, pos) + evt.getKeyChar() + txBuscar.getText().substring(pos)).trim();
-            String facultad = comboFacultad.getSelectedItem().toString();
+            String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
             String sqlFacultad = "select e.nombre from escuela e inner join facultad f on e.facultad_id=f.id "
                     + "where f.nombre='" + facultad + "' and e.nombre like '" + nombre + "%';";
             Control.fillTable(md, sqlFacultad, 1);
         }
     }//GEN-LAST:event_txBuscarKeyTyped
 
+<<<<<<< HEAD
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
         /*Validar si una facultad est� seleccionada*/
@@ -372,6 +401,8 @@ public class Escuela extends javax.swing.JFrame {
         });
     }
 
+=======
+>>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCrear;
