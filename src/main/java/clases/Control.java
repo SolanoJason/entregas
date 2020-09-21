@@ -22,14 +22,13 @@ public enum Control {
     public static final Connection connection = getConnection();
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
-
     /**
      * El método fillCombo rellena el combo dado con la primera columna de la
      * resulta obtenida del String sql
      *
-     * @author Solano Jason
-     * El tag @version se usa normalmente en APIs o librerias, en caso de una aplicacion no aplican normalmente
-     * // @version 1.0
+     * @author Solano Jason El tag @version se usa normalmente en APIs o
+     * librerias, en caso de una aplicacion no aplican normalmente // @version
+     * 1.0
      * @since 2020-09-08
      */
     public static void fillCombo(JComboBox<String> comboBox, String sql) {
@@ -109,6 +108,10 @@ public enum Control {
         return data;
     }
 
+    /**
+     * Retorna TRUE si la consulta retorna al menos una fila
+     * Retorna FALSE si la consulta falla o no retorna nada
+     */
     public static boolean checkQuery(String sql) {
         boolean check = false;
         try (Statement statement = connection.createStatement()) {
@@ -120,10 +123,14 @@ public enum Control {
         }
         return check;
     }
+    
+    /**
+     * Metodo para realizar un DELETE,UPDATE o INSERT con una consulta SQL
+     * Retorna un INTEGER con valor del n�mero de filas afectadas por la consulta
+     */
 
-    public static int updateTable(String sql) {
+    public static int update(String sql) {
         int rowsAffected = 0;
-
 
         // Un try with resources, el problema de que ocurra una exception en esta function es que la connexion
         // sera creada y no podrá ser recogida por el garbage collector, lo cual genera un memory leak

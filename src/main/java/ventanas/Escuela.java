@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
 import java.util.Objects;
 
 /**
@@ -44,8 +45,7 @@ public class Escuela extends javax.swing.JFrame {
     public void init() {
         setLocationRelativeTo(null);
         setTitle("Datos de la escuela");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Validar.textField(txBuscar);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         txBuscar.setEnabled(false);
         btnCancelar.setEnabled(false);
     }
@@ -108,10 +108,18 @@ public class Escuela extends javax.swing.JFrame {
 
         jLabel3.setText("Facultad:");
 
-        comboFacultad.addActionListener(this::comboFacultadActionPerformed);
+        comboFacultad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboFacultadActionPerformed(evt);
+            }
+        });
 
         btnCrear.setText("Crear");
-        btnCrear.addActionListener(this::btnCrearActionPerformed);
+        btnCrear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearActionPerformed(evt);
+            }
+        });
 
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -128,14 +136,27 @@ public class Escuela extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Buscar:");
 
-        txBuscar.addActionListener(this::txBuscarActionPerformed);
+        txBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txBuscarActionPerformed(evt);
+            }
+        });
         txBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txBuscarKeyTyped(evt);
             }
@@ -239,7 +260,7 @@ public class Escuela extends javax.swing.JFrame {
                     } else {
                         String facultad = comboFacultad.getSelectedItem().toString();
                         String sqlCrear = String.format("call registrar_escuela('%s','%s')", escuela, facultad);
-                        Control.updateTable(sqlCrear);
+                        Control.update(sqlCrear);
                         String sqlFacultad = String.format("select e.nombre from escuela e inner join facultad f on e.facultad_id=f.id "
                                 + "where f.nombre='%s'", facultad);
                         Control.fillTable(md, sqlFacultad, 1);
@@ -254,7 +275,9 @@ public class Escuela extends javax.swing.JFrame {
     }//GEN-LAST:event_txBuscarActionPerformed
 
     private void txBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txBuscarKeyTyped
-        if (md.getRowCount() > 0) {
+        if (!(evt.getKeyChar() >= 65 && evt.getKeyChar() <= 122 || evt.getKeyChar() == 32 || evt.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
+            evt.consume();
+        } else {
             int pos = txBuscar.getCaretPosition();
             System.out.println(pos);
             String nombre = (txBuscar.getText().substring(0, pos) + evt.getKeyChar() + txBuscar.getText().substring(pos)).trim();
@@ -303,7 +326,7 @@ public class Escuela extends javax.swing.JFrame {
                     sqlgetId = String.format("select getIdEscuela('%s')", oldEscuela);
                     idEscuela = Control.returnData(sqlgetId);
                     String sqlUpdateEscuela = String.format("update escuela set nombre='%s' where id = '%s'", escuela, idEscuela);
-                    Control.updateTable(sqlUpdateEscuela);
+                    Control.update(sqlUpdateEscuela);
                     btnCrear.setEnabled(true);
                     btnCancelar.setEnabled(false);
                     btnEliminar.setEnabled(true);
@@ -326,6 +349,56 @@ public class Escuela extends javax.swing.JFrame {
         celda = -1;
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        //Verificar si una facultad esta seleccionada
+        if (comboFacultad.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(null, "La facultad no está seleccionada");
+        } else if (tbEscuelas.getSelectionModel().isSelectionEmpty()) {
+            //Verificar si una escuela esta seleccionada
+            JOptionPane.showMessageDialog(null, "Selecciona una escuela");
+        } else {
+            //Obtener el nombre de la escuela seleccionada
+            String nombreEscuela = tbEscuelas.getValueAt(tbEscuelas.getSelectedRow(), 0).toString();
+            //Preguntar si se quiere eliminar dicha escuela
+            int answer = JOptionPane.showConfirmDialog(null, String.format("¿Seguro que desea eliminar la escuela %s?", nombreEscuela));
+            //SI: Se elimina
+            if (answer == 0) {
+                //Verifica si la escuela tiene alumnos
+                String sqlescuelahasAlumnos = String.format("select * from escuela inner join estudiante"
+                        + " on escuela.id = estudiante.escuela_id"
+                        + " where escuela.nombre = '%s'", nombreEscuela);
+                System.out.println(sqlescuelahasAlumnos);
+                if (Control.checkQuery(sqlescuelahasAlumnos)) {
+                    //SI: Muestra un mensaje que la escuela tiene alumnos
+                    JOptionPane.showMessageDialog(null, "La escuela tiene estudiantes, primero elimine a los estudiantes");
+                } else {
+                    //NO: Se elimina la escuela
+                    String sqlDeleteEscuela = String.format("delete from escuela where nombre = '%s'", nombreEscuela);
+                    int rowsAffected = Control.update(sqlDeleteEscuela);
+                    if (rowsAffected == 1) {
+                        String facultad = comboFacultad.getSelectedItem().toString();
+                        String sqlFacultad = String.format("select e.nombre from escuela e inner join facultad f on e.facultad_id=f.id "
+                                + "where f.nombre='%s'", facultad);
+                        Control.fillTable(md, sqlFacultad, 1);
+                        JOptionPane.showMessageDialog(null, "Eliminacion exitosa");
+                    } else if (rowsAffected == 0) {
+                        JOptionPane.showMessageDialog(null, "Eliminacion fallida!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Fatal Error!");
+                    }
+                }
+            }
+            //NO, CANCELAR Y CERRAR: No se modifica nada
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        if (JOptionPane.showConfirmDialog(btnSalir, "Â¿desea abandonar programa?") == 0) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnSalirActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -343,13 +416,17 @@ public class Escuela extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Escuela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Escuela.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Escuela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Escuela.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Escuela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Escuela.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Escuela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Escuela.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>

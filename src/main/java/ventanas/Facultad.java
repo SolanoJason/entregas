@@ -3,11 +3,9 @@ package ventanas;
 
 import clases.Control;
 import clases.Validar;
-import java.awt.Rectangle;
+
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -29,7 +27,8 @@ public class Facultad extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         Validar.textField(txFacultad);
-
+        setTitle("Datos de facultad");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         String sql = "select * from facultad order by nombre";
         llenarTablita();
 
@@ -102,6 +101,11 @@ public class Facultad extends javax.swing.JFrame {
 
         jLabel3.setText("Buscar:");
 
+        txBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txBuscarActionPerformed(evt);
+            }
+        });
         txBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txBuscarKeyReleased(evt);
@@ -259,7 +263,7 @@ public class Facultad extends javax.swing.JFrame {
             String sqCheck = String.format("select id from facultad where nombre='%s'", facu);
             if (!Control.checkQuery(sqCheck)) {
                 String sql = String.format(" call registrar_facultad('%s')", facu);
-                Control.updateTable(sql);
+                Control.update(sql);
                 JOptionPane.showMessageDialog(btnCrear1, "se ingresó correctamente a la base de datos");
                 llenarTablita();
             } else {
@@ -298,7 +302,7 @@ public class Facultad extends javax.swing.JFrame {
                 if (!Control.checkQuery(sqlCheck)) {
                     if (JOptionPane.showConfirmDialog(btnEditar, "desea actualizar la facultad " + tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 1) + " por :\n " + txFacultad.getText().trim()) == 0) {
                         String sql = String.format(" call editar_facultad('%s','%s')", txFacultad.getText().trim(), tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 1).toString());
-                        Control.updateTable(sql);
+                        Control.update(sql);
                         JOptionPane.showMessageDialog(btnEditar, "se  actualizo correctamente");
                         llenarTablita();
                     }
@@ -324,7 +328,7 @@ public class Facultad extends javax.swing.JFrame {
                 String sql_cheCheck = String.format("select  escuela.id from escuela inner join facultad on facultad.id =escuela.facultad_id where facultad.id=%s", tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 0).toString());
                 if (!Control.checkQuery(sql_cheCheck)) {
                     String sql = String.format("delete from facultad where id =%s", tbFacultad.getValueAt(tbFacultad.getSelectedRow(), 0).toString());
-                    Control.updateTable(sql);
+                    Control.update(sql);
                     JOptionPane.showMessageDialog(btnEliminar, "se elimino correctamente");
                     llenarTablita();
                 } else {
@@ -342,7 +346,7 @@ public class Facultad extends javax.swing.JFrame {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
         if(JOptionPane.showConfirmDialog(btnSalir, "¿desea abandonar programa?")==0){
-            System.exit(0);
+            this.dispose();
         }
         
 
@@ -388,6 +392,10 @@ public class Facultad extends javax.swing.JFrame {
             btnEliminar.setEnabled(false);
         }
     }//GEN-LAST:event_tbFacultadPropertyChange
+
+    private void txBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txBuscarActionPerformed
 
     /**
      * @param args the command line arguments
