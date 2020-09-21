@@ -7,7 +7,6 @@ package ventanas;
 
 import clases.Control;
 import clases.Validar;
-<<<<<<< HEAD
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -15,10 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-=======
 
 import javax.swing.*;
->>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ItemEvent;
 import java.util.Objects;
@@ -109,13 +106,6 @@ public class Escuela extends javax.swing.JFrame {
 
         jLabel1.setText("Datos de la escuela:");
 
-<<<<<<< HEAD
-=======
-        jLabel2.setText("Escuela:");
-
-        txEscuela.addActionListener(this::txEscuelaActionPerformed);
-
->>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
         jLabel3.setText("Facultad:");
 
         comboFacultad.addActionListener(this::comboFacultadActionPerformed);
@@ -226,13 +216,6 @@ public class Escuela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-<<<<<<< HEAD
-=======
-    private void txEscuelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txEscuelaActionPerformed
-        // TODO TODO AÃ±adir esta accion
-    }//GEN-LAST:event_txEscuelaActionPerformed
-
->>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
     private void comboFacultadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFacultadActionPerformed
         // TODO AÃ±adir esta accion
     }//GEN-LAST:event_comboFacultadActionPerformed
@@ -241,8 +224,7 @@ public class Escuela extends javax.swing.JFrame {
         if (comboFacultad.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(null, "Primero seleccione una facultad");
         } else {
-<<<<<<< HEAD
-            /*Verificar si el txEscuela no está vacío ni formado por espacios*/
+            /*Verificar si el txEscuela no estï¿½ vacï¿½o ni formado por espacios*/
             String escuela = JOptionPane.showInputDialog("Ingrese la escuela");
             if (escuela != null) {
                 escuela = escuela.trim();
@@ -253,7 +235,7 @@ public class Escuela extends javax.swing.JFrame {
                     boolean check = Control.checkQuery(sqlCheck);
                     System.out.println(sqlCheck + "  " + check);
                     if (check) {
-                        JOptionPane.showMessageDialog(null, "La escuela ya existe en está u otra facultad");
+                        JOptionPane.showMessageDialog(null, "La escuela ya existe en estï¿½ u otra facultad");
                     } else {
                         String facultad = comboFacultad.getSelectedItem().toString();
                         String sqlCrear = String.format("call registrar_escuela('%s','%s')", escuela, facultad);
@@ -262,26 +244,6 @@ public class Escuela extends javax.swing.JFrame {
                                 + "where f.nombre='%s'", facultad);
                         Control.fillTable(md, sqlFacultad, 1);
                     }
-=======
-            /*Verificar si el txEscuela no estÃ¡ vacÃ­o ni formado por espacios*/
-            String escuela = txEscuela.getText();
-            escuela = escuela.trim();
-            if (escuela.length() == 0) {
-                JOptionPane.showMessageDialog(null, "Rellene la escuela correctamente");
-            } else {
-                String sqlCheck = String.format("select * from escuela where nombre='%s'", escuela);
-                boolean check = Control.checkQuery(sqlCheck);
-                System.out.println(sqlCheck + "  " + check);
-                if (check) {
-                    JOptionPane.showMessageDialog(null, "La escuela ya existe en estÃ¡ u otra facultad");
-                } else {
-                    String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
-                    String sqlCrear = String.format("call registrar_escuela('%s','%s')", escuela, facultad);
-                    Control.updateTable(sqlCrear);
-                    String sqlFacultad = String.format("select e.nombre from escuela e inner join facultad f on e.facultad_id=f.id "
-                            + "where f.nombre='%s'", facultad);
-                    Control.fillTable(md, sqlFacultad, 1);
->>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
                 }
             }
         }
@@ -303,15 +265,14 @@ public class Escuela extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txBuscarKeyTyped
 
-<<<<<<< HEAD
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-        /*Validar si una facultad está seleccionada*/
+        /*Validar si una facultad estï¿½ seleccionada*/
         String oldEscuela = "";
         if (btnEditar.getText().equals("Editar")) {
             if (comboFacultad.getSelectedIndex() == -1) {
                 JOptionPane.showMessageDialog(null, "Primero seleccione una facultad");
-                /*Validar si una escuela de la tabla está seleccionada*/
+                /*Validar si una escuela de la tabla estï¿½ seleccionada*/
             } else if (tbEscuelas.getSelectedRow() == -1) {
                 JOptionPane.showMessageDialog(null, "Primero seleccione una escuela");
             } else {
@@ -401,8 +362,6 @@ public class Escuela extends javax.swing.JFrame {
         });
     }
 
-=======
->>>>>>> f865f1697f8c1d52f20e970e9f24957a85ecc0ff
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCrear;
