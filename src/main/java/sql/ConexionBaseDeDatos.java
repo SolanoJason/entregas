@@ -8,25 +8,25 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public final class ConexionBaseDeDatos {
-    private static final FluentLogger logger = FluentLogger.forEnclosingClass();
-    private static Connection con;
+	private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+	private static       Connection   con;
 
-    static {
-        String url = "jdbc:mysql://maria.db.arllk.com:43306/mydb";
-        String user = "root";
-        String pass = "l33tsupah4x0r";
-        try {
-            con = DriverManager.getConnection(url, user, pass);
-        } catch (SQLException e) {
-            logger.atSevere().withStackTrace(StackSize.FULL).withCause(e).log("Hubo un error al conectarse con la base de datos");
-        }
-    }
+	static {
+		String url  = "jdbc:mysql://maria.db.arllk.com:43306/mydb";
+		String user = "root";
+		String pass = "l33tsupah4x0r";
+		try {
+			con = DriverManager.getConnection(url, user, pass);
+		} catch (SQLException e) {
+			logger.atSevere().withStackTrace(StackSize.FULL).withCause(e).log("Hubo un error al conectarse con la base de datos");
+		}
+	}
 
-    private ConexionBaseDeDatos() {
-        throw new IllegalStateException("Utility class");
-    }
+	private ConexionBaseDeDatos() {
+		throw new IllegalStateException("Utility class");
+	}
 
-    public static Connection getConnection() {
-        return con;
-    }
+	public static Connection getConnection() {
+		return con;
+	}
 }
