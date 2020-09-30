@@ -1,5 +1,6 @@
 package ventanas;
 
+import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme;
 import net.miginfocom.swing.MigLayout;
 
@@ -43,6 +44,7 @@ public class Menu extends JFrame {
 	 */
 	private static void setTheme() {
 		FlatMaterialDarkerIJTheme.install();
+		FlatInspector.install("ctrl shift alt X");
 	}
 
 	/**
