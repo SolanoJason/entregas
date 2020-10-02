@@ -3,6 +3,8 @@ plugins {
 	application
 	id("com.github.ben-manes.versions") version "0.33.0"
 	id("com.github.johnrengelman.shadow") version "6.0.0"
+	id("de.inetsoftware.setupbuilder") version "4.8.7"
+	id("com.github.decyg.innosetup") version "1.2"
 }
 
 java {
@@ -29,6 +31,10 @@ repositories {
 	mavenCentral()
 	maven {
 		url = uri("https://oss.sonatype.org/content/repositories/comgithublgooddatepicker-1026")
+	}
+	jcenter()
+	maven {
+		url = uri("http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/")
 	}
 }
 
@@ -68,4 +74,20 @@ dependencies {
 
 	// Para cargar la libreria de Jasper
 	implementation("net.sf.jasperreports", "jasperreports", "6.14.0")
+}
+
+setupBuilder {
+	vendor = "Grupo 1"
+	application = "G1P3"
+	appIdentifier = "ProjectoP3"
+	description = "La aplicacion resultante del projecto de Programacion 3 - Ciclo 2020-1"
+//	icons = "test-icon.icns"
+	defaultResourceLanguage = "es"
+
+	from("jar.outputs")
+
+//	bundleJre = "C:\\Program Files\\AdoptOpenJDK\\jdk-11.0.8.10-hotspot"
+	mainClass = "ventanas.Menu"
+	mainJar = "Programa1-1.0-SNAPSHOT-all.jar"
+
 }
