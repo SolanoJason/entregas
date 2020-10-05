@@ -15,6 +15,7 @@ public class Menu extends JFrame {
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JButton buttonEscuela;
 	private JButton buttonFacultad;
+        private JButton buttonIngalum;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 
 	public Menu() {
@@ -59,13 +60,17 @@ public class Menu extends JFrame {
 			this.setExtendedState(Frame.ICONIFIED);
 			new Facultad().setVisible(true);
 		});
+                buttonIngalum.addActionListener(e -> {
+			this.setExtendedState(Frame.ICONIFIED);
+			new ingalum(this).setVisible(true);
+		});
 	}
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		buttonEscuela  = new JButton();
 		buttonFacultad = new JButton();
-
+                buttonIngalum = new JButton();
 		//======== this ========
 		setTitle("Men\u00fa grupo 2");
 		setMinimumSize(new Dimension(600, 600));
@@ -90,6 +95,10 @@ public class Menu extends JFrame {
 		//---- buttonFacultad ----
 		buttonFacultad.setText("Facultad");
 		contentPane.add(buttonFacultad, "cell 1 0");
+                
+                //---- buttonIngalum ----
+                buttonIngalum.setText("Registrar Alumno");
+                contentPane.add(buttonIngalum, "cell 2 0");
 		pack();
 		setLocationRelativeTo(null);
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents

@@ -18,9 +18,9 @@ tasks.compileJava {
 	options.isFailOnError = true
 }
 
-// Aca indicamos la ubicaciÃ³n del main
+// Aca indicamos la ubicación del main
 application {
-	applicationName = "Proyecto en aula ProgramaciÃ³n 3"
+	applicationName = "Proyecto en aula Programación 3"
 	mainClassName = "ventanas.Menu"
 }
 
