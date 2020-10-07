@@ -10,35 +10,38 @@ import javax.swing.*;
  * @author LENOVO
  */
 @SuppressWarnings({"FieldCanBeLocal", "RedundantSuppression"})
-public class Facultad extends javax.swing.JFrame {
+public final class Facultad extends javax.swing.JFrame {
+
+	private final JFrame padre;
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JButton     btnCancelar;
-	private javax.swing.JButton     btnCrear1;
-	private javax.swing.JButton     btnEditar;
-	private javax.swing.JButton     btnEliminar;
-	private javax.swing.JButton     btnSalir;
-	private javax.swing.JLabel      jLabel2;
-	private javax.swing.JLabel      jLabel3;
-	private javax.swing.JPanel      jPanel2;
-	private javax.swing.JPanel      jPanel4;
+	private javax.swing.JButton btnCancelar;
+	private javax.swing.JButton btnCrear1;
+	private javax.swing.JButton btnEditar;
+	private javax.swing.JButton btnEliminar;
+	private javax.swing.JButton btnSalir;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel3;
+	private javax.swing.JPanel jPanel2;
+	private javax.swing.JPanel jPanel4;
 	private javax.swing.JScrollPane jScrollPane1;
-	private javax.swing.JLabel      labelInfo;
-	private javax.swing.JTable      tbFacultad;
-	private javax.swing.JTextField  txBuscar;
-	private javax.swing.JTextField  txFacultad;
+	private javax.swing.JLabel labelInfo;
+	private javax.swing.JTable tbFacultad;
+	private javax.swing.JTextField txBuscar;
+	private javax.swing.JTextField txFacultad;
 	// End of variables declaration//GEN-END:variables
 
 
 	/**
 	 * Creates new form Facultad
 	 */
-	public Facultad() {
+	public Facultad(JFrame padre) {
+		this.padre = padre;
 		initComponents();
 		setLocationRelativeTo(null);
 		Validar.textField(txFacultad);
 		setTitle("Datos de facultad");
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		llenarTablita();
 	}
 
@@ -355,4 +358,10 @@ public class Facultad extends javax.swing.JFrame {
 	private void txBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txBuscarActionPerformed
 		// TODO add your handling code here:
 	}//GEN-LAST:event_txBuscarActionPerformed
+
+	@Override
+	public void dispose() {
+		padre.setExtendedState(NORMAL);
+		super.dispose();
+	}
 }

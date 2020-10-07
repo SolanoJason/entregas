@@ -18,14 +18,14 @@ tasks.compileJava {
 	options.isFailOnError = true
 }
 
-// Aca indicamos la ubicación del main
+// Aca indicamos la ubicaciï¿½n del main
 application {
-	applicationName = "Proyecto en aula Programación 3"
+	applicationName = "Proyecto en aula Programaciï¿½n 3"
 	mainClassName = "ventanas.Menu"
 }
 
 group = "com.grupodos"
-version = "1.0-SNAPSHOT"
+version = "1.0.0.1"
 
 repositories {
 	mavenCentral()
@@ -72,7 +72,7 @@ dependencies {
 	// https://github.com/google/guava/wiki
 	implementation("com.google.guava", "guava", "29.0-jre")
 
-	// Para cargar la libreria de Jasper
+	// Para cargar la librerÃ­a de Jasper
 	implementation("net.sf.jasperreports", "jasperreports", "6.14.0")
 }
 

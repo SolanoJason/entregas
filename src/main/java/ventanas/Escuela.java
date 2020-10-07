@@ -14,28 +14,31 @@ import java.util.Objects;
 @SuppressWarnings({"RedundantSuppression", "FieldCanBeLocal"})
 public class Escuela extends javax.swing.JFrame {
 
+	private final JFrame padre;
+
 	/**
 	 * Creates new form Facultad
 	 */
 	DefaultTableModel md;
-	int               celda = -1;
+	int celda = -1;
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JButton           btnCancelar;
-	private javax.swing.JButton           btnCrear;
-	private javax.swing.JButton           btnEditar;
-	private javax.swing.JButton           btnEliminar;
-	private javax.swing.JButton           btnSalir;
+	private javax.swing.JButton btnCancelar;
+	private javax.swing.JButton btnCrear;
+	private javax.swing.JButton btnEditar;
+	private javax.swing.JButton btnEliminar;
+	private javax.swing.JButton btnSalir;
 	private javax.swing.JComboBox<String> comboFacultad;
-	private javax.swing.JLabel            jLabel1;
-	private javax.swing.JLabel            jLabel3;
-	private javax.swing.JLabel            jLabel4;
-	private javax.swing.JScrollPane       jScrollPane1;
-	private javax.swing.JTable            tbEscuelas;
-	private javax.swing.JTextField        txBuscar;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JScrollPane jScrollPane1;
+	private javax.swing.JTable tbEscuelas;
+	private javax.swing.JTextField txBuscar;
 	// End of variables declaration//GEN-END:variables
 
-	public Escuela() {
+	public Escuela(JFrame padre) {
+		this.padre = padre;
 		initComponents();
 		init();
 		addTable();
@@ -360,4 +363,9 @@ public class Escuela extends javax.swing.JFrame {
 		}
 	}//GEN-LAST:event_btnSalirActionPerformed
 
+	@Override
+	public void dispose() {
+		padre.setExtendedState(NORMAL);
+		super.dispose();
+	}
 }
