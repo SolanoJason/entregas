@@ -46,7 +46,7 @@ public class Escuela extends javax.swing.JFrame {
 	}
 
 	public void init() {
-		setLocationRelativeTo(null);
+                setLocationRelativeTo(null);
 		setTitle("Datos de la escuela");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		txBuscar.setEnabled(false);
@@ -366,6 +366,7 @@ public class Escuela extends javax.swing.JFrame {
 	@Override
 	public void dispose() {
 		padre.setExtendedState(NORMAL);
+                padre.setVisible(true);
 		super.dispose();
 	}
 }
