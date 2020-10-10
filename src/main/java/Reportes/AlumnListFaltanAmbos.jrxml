@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="40375527-073e-456e-8694-1090e0fc95db">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="facultad" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from MOSTRAR where facultad like '%' and laptop='NO' and chip='NO';]]>
+	</queryString>
+	<field name="DNI" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOMBRES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="APELLIDOS" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DIRECCIÓN" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CODIGO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ESCUELA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FACULTAD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CHIP" class="java.lang.String"/>
+	<field name="LAPTOP" class="java.lang.String"/>
+	<field name="FECHA_CHIP" class="java.lang.String"/>
+	<field name="FECHA_LAPTOP" class="java.lang.String"/>
+	<field name="PERSONA_CHIP" class="java.lang.String"/>
+	<field name="PERSONA_LAPTOP" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="802" height="79" uuid="d8ead1e7-ec37-4738-ac67-7aba1ce0b68c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de alumnos vulnerables que falta entregar ambos]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="49" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="412" y="0" width="100" height="20" uuid="24a246bd-f360-4183-8f77-17e1295ec804"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="312" y="0" width="100" height="20" uuid="6a1b5bff-4d3c-47c1-b2ab-79bdc5e8fb0a"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Fecha de emision:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="412" y="20" width="100" height="20" uuid="51ecdf40-1fe2-4ec6-a013-d5215938df6a"/>
+				<textFieldExpression><![CDATA[$P{facultad}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="312" y="20" width="100" height="20" uuid="15c8bbaf-d1c9-4ba9-ac68-8489cbcfb7c3"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Facultad:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="64" height="20" uuid="11f6f944-04f5-4831-8f45-8a8cc73e9f75"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="78" y="0" width="60" height="20" uuid="73688593-78fb-4255-aea3-59b2e11ca539"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[NOMBRES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="155" y="0" width="85" height="20" uuid="6c4c3c0e-61ca-4b58-87f0-7e81140cb168"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[APELLIDOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="373" y="0" width="100" height="20" uuid="5788d964-bd0d-499f-ac31-9dface5112c9"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[DIRECCIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="512" y="0" width="281" height="20" uuid="1f64804b-af50-420a-9239-4cee34cc6245"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ESCUELA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="254" y="0" width="78" height="20" uuid="ccdcbd23-5f23-44ea-8787-e958dac7955b"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="47" width="802" height="1" uuid="52d824ef-d8db-4b9b-b6f6-8d47bc486059"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="64" height="20" uuid="ef84e2bf-450c-47e6-a6e3-d3155e649d09"/>
+				<textFieldExpression><![CDATA[$F{DNI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="0" width="60" height="20" uuid="211c0fcf-b310-4049-900c-40111fc77d9e"/>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="155" y="1" width="85" height="20" uuid="053ebce6-c604-46c2-9701-b9ff075e9648"/>
+				<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="373" y="0" width="100" height="20" uuid="b5d67785-6843-4a07-a244-932e7f8ac3b1"/>
+				<textFieldExpression><![CDATA[$F{DIRECCIÓN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="512" y="0" width="281" height="20" uuid="d49301d2-1745-4f79-8916-26b1894a517e"/>
+				<textFieldExpression><![CDATA[$F{ESCUELA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="254" y="1" width="78" height="20" uuid="2aaf0d82-af8c-4260-808b-e03928541eee"/>
+				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="20" width="802" height="1" uuid="3016c19e-ca06-449f-91e2-a4faf90ed8f9"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="332" y="14" width="80" height="20" uuid="c440813c-7d2f-4bdf-8486-fbedf4fae69f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="412" y="14" width="40" height="20" uuid="565bbbc2-f16d-46a2-9b92-0cd79f2a67c8"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
