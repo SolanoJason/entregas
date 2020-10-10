@@ -1,7 +1,7 @@
 package ventanas;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDarkerIJTheme;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -16,6 +16,7 @@ public class Menu extends JFrame {
     private JButton buttonEscuela;
     private JButton buttonFacultad;
     private JButton buttonIngresarAlumno;
+    private JButton buttonReportes;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     public Menu() {
@@ -44,7 +45,7 @@ public class Menu extends JFrame {
      * @author Arley
      */
     private static void setTheme() {
-        FlatMaterialDarkerIJTheme.install();
+        FlatLightLaf.install();
         FlatInspector.install("ctrl shift alt X");
     }
 
@@ -64,6 +65,10 @@ public class Menu extends JFrame {
             this.setExtendedState(Frame.ICONIFIED);
             new IngresarAlumno(this).setVisible(true);
         });
+        buttonReportes.addActionListener(e -> {
+            this.setExtendedState(Frame.ICONIFIED);
+            new Reportes(this).setVisible(true);
+        });
     }
 
     private void initComponents() {
@@ -71,6 +76,7 @@ public class Menu extends JFrame {
         buttonEscuela = new JButton();
         buttonFacultad = new JButton();
         buttonIngresarAlumno = new JButton();
+        buttonReportes = new JButton();
 
         //======== this ========
         setTitle("Men\u00fa grupo 2");
@@ -95,6 +101,11 @@ public class Menu extends JFrame {
         //---- buttonIngalum ----
         buttonIngresarAlumno.setText("Ingresar alumno");
         contentPane.add(buttonIngresarAlumno, "cell 2 0");
+        
+        //---- buttonReportes ----
+        buttonReportes.setText("Generar reportes");
+        contentPane.add(buttonReportes, "cell 0 1");
+        
         pack();
         setLocationRelativeTo(null);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
