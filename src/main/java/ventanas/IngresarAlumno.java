@@ -392,6 +392,9 @@ public final class IngresarAlumno extends JDialog {
 
 		// Botón usado para llamar al método agregando
 		agregar.addActionListener(e -> agregarUsuario());
+                
+                // Botón usado para llamar al método dispose
+                cancelar.addActionListener(e -> dispose());
 	}
 
 	private void setupLayout() {

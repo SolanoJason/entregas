@@ -366,6 +366,7 @@ public class Escuela extends javax.swing.JFrame {
     @Override
     public void dispose() {
         padre.setExtendedState(NORMAL);
+        padre.setVisible(true);
         super.dispose();
     }
 }

@@ -35,7 +35,7 @@ public enum Report {
      * poder configurar como se va a mostrar el reporte al gusto
      */
     public static JasperViewer showReport(String path) {
-        try {
+        try {   
             JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
             JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, null, con);
             if (jasperPrint.getPages().size() == 0) {
