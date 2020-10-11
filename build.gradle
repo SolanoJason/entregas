@@ -4,7 +4,7 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.33.0'
     id 'com.github.johnrengelman.shadow' version '6.0.0'
     id 'de.inetsoftware.setupbuilder' version '4.8.7'
-
+    id 'edu.sc.seis.launch4j' version '2.4.8'
 }
 
 java {
@@ -73,7 +73,12 @@ dependencies {
     implementation 'com.google.guava:guava:29.0-jre' 
 
     // Para cargar la librería de Jasper
-    implementation 'net.sf.jasperreports:jasperreports:6.14.0' 
+    implementation 'net.sf.jasperreports:jasperreports:6.14.0'
+
+    // Material icons
+    implementation 'com.github.jiconfont:jiconfont-swing:1.0.0'
+    implementation 'com.github.jiconfont:jiconfont-font_awesome:4.7.0.1'
+    implementation 'com.github.jiconfont:jiconfont-google_material_design_icons:2.2.0.2'
 }
 
 setupBuilder {
@@ -81,19 +86,56 @@ setupBuilder {
     application = 'G1P3'
     appIdentifier = 'ProjectoP3'
     description = 'La aplicacion resultante del projecto de Programacion 3 - Ciclo 2020-1'
-//    icons = "test-icon.icns"
     licenseFile "license.txt"
-    from shadowJar.outputs
-//    bundleJre = 1.8
-    mainClass = 'ventanas.Menu'
-    mainJar = 'Programa1-1.0.0.1-all.jar'
+    icons = ["${projectDir}/src/main/resources/icons/iconounasam.png"]
+
+//    from shadowJar.outputs
+
+//    bundleJre = 'C:\\Program Files\\AdoptOpenJDK\\jdk-11.0.8.10-hotspot'
+//    mainClass = 'ventanas.Menu'
+//    mainJar = 'Programa1-1.0.0.1-all.jar'
+
+    desktopStarter {
+        displayName = 'Projecto Entrega de dispositivos - P3 2020-1'
+        description   = "Aplicacion desarrollada para la entrega de dispositivos"
+    }
+}
+
+createExe.dependsOn ':copyShadow'
+
+task copyShadow (type: Copy) {
+    dependsOn shadowJar
+    println 'copiando el shadowJar'
+    println "de ${project.tasks.shadowJar.archivePath} a ${buildDir}/launch4j/lib/"
+    from "${project.tasks.shadowJar.archivePath}"
+    into "${buildDir}/launch4j/lib/"
+}
+
+
+launch4j {
+
+    mainClassName = project.mainClassName
+    icon = "${projectDir}/src/main/resources/icons/iconounasam.ico"
+    dontWrapJar = false
+    headerType = 'gui'
+    downloadUrl = 'https://adoptopenjdk.net/index.html'
+//    bundledJre64Bit = true
+//    bundledJreAsFallback = true
+//    bundledJrePath = '1.8'
+    jar = "lib/${project.tasks.shadowJar.archiveName}"
+    copyConfigurable = ["${project.tasks.shadowJar.archivePath}"]
+    outfile = 'Entrega_Dipositivos_P3.exe'
 }
 
 msi {
-    dependsOn(shadowJar)
     setLanguages('es-es')
     minOS = 6.1
+    from( createExe.outputs ) {
+        include 'Entrega_Dipositivos_P3.exe'
+    }
 }
+
+msi.dependsOn createExe
 
 shadowJar{
 //  minimize()

@@ -50,9 +50,8 @@ public final class Facultad extends javax.swing.JFrame {
 			String sql = String.format("SELECT * FROM facultad WHERE nombre LIKE'%%%s%%'", txBuscar.getText().trim());
 			Control.fillTable2(tbFacultad, sql);
 			labelInfo.setText("mostrando las coincidencias con: " + txBuscar.getText().trim());
-
 		} else {
-			String sql = "select * from facultad";
+			String sql = "SELECT * FROM facultad";
 			Control.fillTable2(tbFacultad, sql);
 			labelInfo.setText("mostrando todos los registros");
 		}

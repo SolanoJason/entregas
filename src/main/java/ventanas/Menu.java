@@ -2,6 +2,9 @@ package ventanas;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
+import jiconfont.icons.font_awesome.FontAwesome;
+import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
+import jiconfont.swing.IconFontSwing;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -13,10 +16,10 @@ import java.awt.*;
 public class Menu extends JFrame {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    private JButton buttonEscuela;
-    private JButton buttonFacultad;
-    private JButton buttonIngresarAlumno;
-    private JButton buttonReportes;
+	private JButton buttonEscuela;
+	private JButton buttonFacultad;
+	private JButton buttonIngresarAlumno;
+	private JButton buttonReportes;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     public Menu() {
@@ -47,6 +50,8 @@ public class Menu extends JFrame {
     private static void setTheme() {
         FlatLightLaf.install();
         FlatInspector.install("ctrl shift alt X");
+	    IconFontSwing.register(FontAwesome.getIconFont());
+	    IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
     }
 
     /**
@@ -73,41 +78,45 @@ public class Menu extends JFrame {
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        buttonEscuela = new JButton();
-        buttonFacultad = new JButton();
-        buttonIngresarAlumno = new JButton();
-        buttonReportes = new JButton();
+		buttonEscuela = new JButton();
+		buttonFacultad = new JButton();
+		buttonIngresarAlumno = new JButton();
+		buttonReportes = new JButton();
 
-        //======== this ========
-        setTitle("Men\u00fa grupo 2");
-        setMinimumSize(new Dimension(600, 600));
-        setVisible(true);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new MigLayout("fill,insets 15,hidemode 3,align center center",
-                                            // columns
-                                            "[grow,sizegroup 1,fill]" + "[grow,sizegroup 1,fill]" + "[grow,sizegroup 1,fill]",
-                                            // rows
-                                            "[grow,sizegroup 1,fill]" + "[grow,sizegroup 1,fill]" + "[grow,sizegroup 1,fill]"));
+		//======== this ========
+		setTitle("Men\u00fa grupo 2");
+		setMinimumSize(new Dimension(600, 600));
+		setVisible(true);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		Container contentPane = getContentPane();
+		contentPane.setLayout(new MigLayout(
+			"fill,insets 15,hidemode 3,align center center",
+			// columns
+			"[grow,sizegroup 1,fill]" +
+			"[grow,sizegroup 1,fill]" +
+			"[grow,sizegroup 1,fill]",
+			// rows
+			"[grow,sizegroup 1,fill]" +
+			"[grow,sizegroup 1,fill]" +
+			"[grow,sizegroup 1,fill]"));
 
-        //---- buttonEscuela ----
-        buttonEscuela.setText("Escuela");
-        contentPane.add(buttonEscuela, "cell 0 0");
+		//---- buttonEscuela ----
+		buttonEscuela.setText("Escuela");
+		contentPane.add(buttonEscuela, "cell 0 0");
 
-        //---- buttonFacultad ----
-        buttonFacultad.setText("Facultad");
-        contentPane.add(buttonFacultad, "cell 1 0");
+		//---- buttonFacultad ----
+		buttonFacultad.setText("Facultad");
+		contentPane.add(buttonFacultad, "cell 1 0");
 
-        //---- buttonIngalum ----
-        buttonIngresarAlumno.setText("Ingresar alumno");
-        contentPane.add(buttonIngresarAlumno, "cell 2 0");
-        
-        //---- buttonReportes ----
-        buttonReportes.setText("Generar reportes");
-        contentPane.add(buttonReportes, "cell 0 1");
-        
-        pack();
-        setLocationRelativeTo(null);
+		//---- buttonIngresarAlumno ----
+		buttonIngresarAlumno.setText("Ingresar alumno");
+		contentPane.add(buttonIngresarAlumno, "cell 2 0");
+
+		//---- buttonReportes ----
+		buttonReportes.setText("REPORTES");
+		contentPane.add(buttonReportes, "cell 0 1");
+		pack();
+		setLocationRelativeTo(null);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
