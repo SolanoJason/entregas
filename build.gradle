@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.ben-manes.versions' version '0.33.0'
-    id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'de.inetsoftware.setupbuilder' version '4.8.7'
     id 'edu.sc.seis.launch4j' version '2.4.8'
 }
@@ -38,34 +38,42 @@ repositories {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
 
 dependencies {
     // Esto es para unit tests, aun no se va a usar
-    testImplementation 'junit:junit:4.13' 
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
 
     // logger, esto es super super util  frontend 
     implementation 'com.google.flogger:flogger:0.5.1' 
     //backend logger
     implementation 'com.google.flogger:flogger-log4j2-backend:0.5.1' 
-    implementation 'org.apache.logging.log4j:log4j-core:2.13.3' 
+    implementation 'org.apache.logging.log4j:log4j-core:2.13.3'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.3'
 
     //Para el skin, hay un montón de skins para escoger
     // https://github.com/JFormDesigner/FlatLaf/tree/master/flatlaf-intellij-themes#themes
-    implementation 'com.formdev:flatlaf:0.42' 
-    implementation 'com.formdev:flatlaf-intellij-themes:0.42' 
-    implementation 'com.formdev:flatlaf-extras:0.42' 
+    implementation 'com.formdev:flatlaf:0.43'
+    implementation 'com.formdev:flatlaf-intellij-themes:0.43'
+    implementation 'com.formdev:flatlaf-extras:0.43'
     implementation 'com.formdev:svgSalamander:1.1.2.3' 
 
     // Para usar calendario
-    implementation 'com.github.lgooddatepicker:LGoodDatePicker:11.0.2' 
+    implementation 'com.github.lgooddatepicker:LGoodDatePicker:11.1.0'
 
 
     //Hace posible  y no llorar sangre  escribir interfaces graficas a mano
     implementation 'com.miglayout:miglayout-core:5.2' 
-    implementation 'com.miglayout:miglayout-swing:5.2' 
+    implementation 'com.miglayout:miglayout-swing:5.2'
 
     //Conector para mysql
-    implementation 'mysql:mysql-connector-java:8.0.21' 
+    implementation 'mysql:mysql-connector-java:8.0.21'
+    // db pool
+    implementation 'com.zaxxer:HikariCP:3.4.5'
+    // connector para maria
+//    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.0'
 
     //Guava
     //Porque guava?
@@ -73,10 +81,10 @@ dependencies {
     implementation 'com.google.guava:guava:29.0-jre' 
 
     // Para cargar la librería de Jasper
-    implementation 'net.sf.jasperreports:jasperreports:6.14.0'
+    implementation 'net.sf.jasperreports:jasperreports:6.15.0'
 
     // Material icons
-    implementation 'com.github.jiconfont:jiconfont-swing:1.0.0'
+    implementation 'com.github.jiconfont:jiconfont-swing:1.0.1'
     implementation 'com.github.jiconfont:jiconfont-font_awesome:4.7.0.1'
     implementation 'com.github.jiconfont:jiconfont-google_material_design_icons:2.2.0.2'
 }
@@ -105,8 +113,6 @@ createExe.dependsOn ':copyShadow'
 
 task copyShadow (type: Copy) {
     dependsOn shadowJar
-    println 'copiando el shadowJar'
-    println "de ${project.tasks.shadowJar.archivePath} a ${buildDir}/launch4j/lib/"
     from "${project.tasks.shadowJar.archivePath}"
     into "${buildDir}/launch4j/lib/"
 }

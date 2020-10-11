@@ -5,9 +5,9 @@
  */
 package ventanas;
 
-import clases.Control;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.flogger.StackSize;
+import sql.ConexionPool;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -23,7 +23,6 @@ import static java.awt.Frame.NORMAL;
  */
 public final class IngresarAlumno extends JDialog {
 	private static final FluentLogger logger = FluentLogger.forEnclosingClass();
-	private static final Connection con = Control.connection;
 	private final JFrame padre;
 	/**
 	 * Variables usadas para llenar el JCombobox
@@ -144,9 +143,9 @@ public final class IngresarAlumno extends JDialog {
 	 * @param apellido  Apellido del alumno
 	 */
 	public static void agregando(String codigo, int escuela, String dni, String sis, String direccion, String nombre, String apellido) {
-		try {
+		try (Connection connection = ConexionPool.getConnection()) {
 			String sql = "call registrar_alumno('" + codigo + "','" + escuela + "','" + dni + "','" + sis + "','" + direccion + "','" + nombre + "','" + apellido + "')";
-			try (PreparedStatement ps = con.prepareStatement(sql)) {
+			try (PreparedStatement ps = connection.prepareStatement(sql)) {
 				try (ResultSet ignored = ps.executeQuery()) {
 					logger.atFiner().log("Alumno agregado");
 				}
@@ -164,9 +163,9 @@ public final class IngresarAlumno extends JDialog {
 	 */
 	public static int contarLineasEnTabla(String tabla) {
 		int cont = 0;
-		try {
+		try (Connection connection = ConexionPool.getConnection()) {
 			String sql = "SELECT * FROM " + tabla;
-			try (PreparedStatement ps = con.prepareStatement(sql)) {
+			try (PreparedStatement ps = connection.prepareStatement(sql)) {
 				try (ResultSet rs = ps.executeQuery()) {
 					while (rs.next()) {
 						cont++;
@@ -213,9 +212,9 @@ public final class IngresarAlumno extends JDialog {
 	 */
 	public static boolean elCodigoEsRepetido(String codigo) {
 		boolean comp = false;
-		try {
+		try (Connection connection = ConexionPool.getConnection()) {
 			String sql = "SELECT codigo FROM estudiante";
-			try (PreparedStatement ps = con.prepareStatement(sql)) {
+			try (PreparedStatement ps = connection.prepareStatement(sql)) {
 				try (ResultSet rs = ps.executeQuery()) {
 					while (rs.next()) {
 						if (codigo.equals(rs.getString(1))) {
@@ -392,9 +391,9 @@ public final class IngresarAlumno extends JDialog {
 
 		// Botón usado para llamar al método agregando
 		agregar.addActionListener(e -> agregarUsuario());
-                
-                // Botón usado para llamar al método dispose
-                cancelar.addActionListener(e -> dispose());
+
+		// Botón usado para llamar al método dispose
+		cancelar.addActionListener(e -> dispose());
 	}
 
 	private void setupLayout() {
@@ -521,9 +520,9 @@ public final class IngresarAlumno extends JDialog {
 		int cont = contarLineasEnTabla("escuela");
 		nombreEscuela = new String[cont];
 		idEscuela = new int[cont];
-		try {
+		try (Connection connection = ConexionPool.getConnection()) {
 			String sql = "SELECT * FROM escuela";
-			try (PreparedStatement ps = con.prepareStatement(sql)) {
+			try (PreparedStatement ps = connection.prepareStatement(sql)) {
 				try (ResultSet rs = ps.executeQuery()) {
 					int cont2 = 0;
 					while (rs.next()) {

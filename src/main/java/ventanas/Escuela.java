@@ -70,11 +70,11 @@ public class Escuela extends javax.swing.JFrame {
         Control.fillCombo(comboFacultad, sqlCombo);
         comboFacultad.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                String selectedFacultad = e.getItem().toString();
-                String sqlTable = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON f.id=e.facultad_id WHERE f.nombre = '%s'", selectedFacultad);
-                System.out.println(sqlTable);
-                Control.fillTableModel(md, sqlTable, 1);
-                txBuscar.setEnabled(true);
+	            String selectedFacultad = e.getItem().toString();
+	            String sqlTable = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON f.id=e.facultad_id WHERE f.nombre = '%s'", selectedFacultad);
+	            System.out.println(sqlTable);
+	            Control.fillTableModel(md, sqlTable, 1);
+	            txBuscar.setEnabled(true);
             }
         });
     }
@@ -230,11 +230,11 @@ public class Escuela extends javax.swing.JFrame {
                         if (check) {
                             JOptionPane.showMessageDialog(null, "La escuela ya existe en está u otra facultad");
                         } else {
-                            String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
-                            String sqlCrear = String.format("CALL registrar_escuela('%s','%s')", escuela, facultad);
-                            Control.update(sqlCrear);
-                            String sqlFacultad = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON e.facultad_id=f.id WHERE f.nombre='%s'", facultad);
-                            Control.fillTableModel(md, sqlFacultad, 1);
+	                        String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
+	                        String sqlCrear = String.format("CALL registrar_escuela('%s','%s')", escuela, facultad);
+	                        Control.update(sqlCrear);
+	                        String sqlFacultad = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON e.facultad_id=f.id WHERE f.nombre='%s'", facultad);
+	                        Control.fillTableModel(md, sqlFacultad, 1);
                         }
                     }
                 }
@@ -249,12 +249,12 @@ public class Escuela extends javax.swing.JFrame {
             if (!(evt.getKeyChar() >= 65 && evt.getKeyChar() <= 122 || evt.getKeyChar() == 32 || evt.getKeyChar() == KeyEvent.VK_BACK_SPACE)) {
                 evt.consume();
             } else {
-                int pos = txBuscar.getCaretPosition();
-                System.out.println(pos);
-                String nombre = (txBuscar.getText().substring(0, pos) + evt.getKeyChar() + txBuscar.getText().substring(pos)).trim();
-                String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
-                String sqlFacultad = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON e.facultad_id=f.id WHERE f.nombre='%s' AND e.nombre LIKE '%s%%';", facultad, nombre);
-                Control.fillTableModel(md, sqlFacultad, 1);
+	            int pos = txBuscar.getCaretPosition();
+	            System.out.println(pos);
+	            String nombre = (txBuscar.getText().substring(0, pos) + evt.getKeyChar() + txBuscar.getText().substring(pos)).trim();
+	            String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
+	            String sqlFacultad = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON e.facultad_id=f.id WHERE f.nombre='%s' AND e.nombre LIKE '%s%%';", facultad, nombre);
+	            Control.fillTableModel(md, sqlFacultad, 1);
             }
 	}//GEN-LAST:event_txBuscarKeyTyped
 
@@ -307,14 +307,14 @@ public class Escuela extends javax.swing.JFrame {
 	}//GEN-LAST:event_btnEditarActionPerformed
 
 	private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-            String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
-            String sqlFacultad = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON e.facultad_id=f.id WHERE f.nombre='%s'", facultad);
-            Control.fillTableModel(md, sqlFacultad, 1);
-            btnCrear.setEnabled(true);
-            btnCancelar.setEnabled(false);
-            btnEliminar.setEnabled(true);
-            btnEditar.setText("Editar");
-            celda = -1;
+		String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
+		String sqlFacultad = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON e.facultad_id=f.id WHERE f.nombre='%s'", facultad);
+		Control.fillTableModel(md, sqlFacultad, 1);
+		btnCrear.setEnabled(true);
+		btnCancelar.setEnabled(false);
+		btnEliminar.setEnabled(true);
+		btnEditar.setText("Editar");
+		celda = -1;
 	}//GEN-LAST:event_btnCancelarActionPerformed
 
 	private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -342,10 +342,10 @@ public class Escuela extends javax.swing.JFrame {
                         String sqlDeleteEscuela = String.format("DELETE FROM escuela WHERE nombre = '%s'", nombreEscuela);
                         int rowsAffected = Control.update(sqlDeleteEscuela);
                         if (rowsAffected == 1) {
-                            String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
-                            String sqlFacultad = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON e.facultad_id=f.id WHERE f.nombre='%s'", facultad);
-                            Control.fillTableModel(md, sqlFacultad, 1);
-                            JOptionPane.showMessageDialog(null, "Eliminación exitosa");
+	                        String facultad = Objects.requireNonNull(comboFacultad.getSelectedItem()).toString();
+	                        String sqlFacultad = String.format("SELECT e.nombre FROM escuela e INNER JOIN facultad f ON e.facultad_id=f.id WHERE f.nombre='%s'", facultad);
+	                        Control.fillTableModel(md, sqlFacultad, 1);
+	                        JOptionPane.showMessageDialog(null, "Eliminación exitosa");
                         } else if (rowsAffected == 0) {
                             JOptionPane.showMessageDialog(null, "¡Eliminación fallida!");
                         } else {
