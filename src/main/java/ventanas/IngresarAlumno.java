@@ -7,6 +7,8 @@ package ventanas;
 
 import com.google.common.flogger.FluentLogger;
 import com.google.common.flogger.StackSize;
+import custom_beans.WinNotification;
+import java.awt.AWTException;
 import sql.ConexionPool;
 
 import javax.swing.*;
@@ -17,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import static java.awt.Frame.NORMAL;
+import java.awt.TrayIcon;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -354,7 +357,11 @@ public final class IngresarAlumno extends JDialog {
 				}
 				// presionar
 				if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-					agregarUsuario();
+                                    try {
+                                        agregarUsuario();
+                                    } catch (AWTException ex) {
+                                        System.err.println("no se pudo agregar el usuario");
+                                    }
 				}
 			}
 
@@ -440,7 +447,13 @@ public final class IngresarAlumno extends JDialog {
                 });
                 
 		// Botón usado para llamar al método agregando
-		agregar.addActionListener(e -> agregarUsuario());
+		agregar.addActionListener(e -> {
+                    try {
+                        agregarUsuario();
+                    } catch (AWTException ex) {
+                        System.err.println("no se pudo agregar al usuario");
+                    }
+                });
 
 		// Botón usado para llamar al método dispose
 		cancelar.addActionListener(e -> dispose());
@@ -673,6 +686,7 @@ public final class IngresarAlumno extends JDialog {
     ResultSet rs=null;
     
     String sql= "SELECT * FROM ESTUDIANTES WHERE "+columna+" LIKE '%"+buscado.getText()+"%'";   
+    Connection con = ConexionPool.getConnection();
     ps=con.prepareStatement(sql);
     rs=ps.executeQuery();
     ResultSetMetaData abc = rs.getMetaData();
@@ -708,7 +722,7 @@ public final class IngresarAlumno extends JDialog {
 	/**
 	 * usado para corroborar que todas las casillas estén completas y mandar al procedure
 	 */
-	public void agregarUsuario() {
+	public void agregarUsuario() throws AWTException {
 		if (todoCorrecto()) {
 			if (JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea registrar a este usuario?", "Atención", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE) == JOptionPane.YES_OPTION) {
 				String codigoIngresado = codigo.getText();
@@ -735,7 +749,8 @@ public final class IngresarAlumno extends JDialog {
 				agregando(codigoIngresado, idEscuelaIngresado, dniIngresado, sisfoh, direcc, nombreIngresado, apellidoIngresado);
 			}
 		} else {
-			logger.atSevere().log("No se ingreso al usuario %s", nombre.getText());
+			//logger.atSevere().log("No se ingreso al usuario %s", nombre.getText());
+                        WinNotification.mostrarNotificacion("Advertencia", "Falta ingresar el nombre", TrayIcon.MessageType.ERROR);
 		}
 
 	}
@@ -745,41 +760,47 @@ public final class IngresarAlumno extends JDialog {
 	 * <p>
 	 * Es mejor retornar un boolean a usar una variable del objeto, es mas entendible, ademas que limita los efectos secundarios
 	 */
-	public boolean todoCorrecto() {
+	public boolean todoCorrecto() throws AWTException {
 		boolean fallas = false;
 		// comprobando nombre
 		if (nombre.getText().isEmpty()) {
-			logger.atWarning().log("Falta ingresar el nombre");
+			//logger.atWarning().log("Falta ingresar el nombre");
+                        WinNotification.mostrarNotificacion("Advertencia", "Falta ingresar el nombre", TrayIcon.MessageType.WARNING);
 			fallas = true;
 		}
 
 		// comprobando apellido
 		if (apellido.getText().isEmpty()) {
-			logger.atWarning().log("Falta ingresar el apellido");
+			//logger.atWarning().log("Falta ingresar el apellido");
+                        WinNotification.mostrarNotificacion("Advertencia", "Falta ingresar el apellido", TrayIcon.MessageType.WARNING);
 			fallas = true;
 		}
 
 		// comprobando código
 		if (codigo.getText().isEmpty()) {
-			logger.atWarning().log("Falta ingresar el codigo");
+			//logger.atWarning().log("Falta ingresar el codigo");
+                        WinNotification.mostrarNotificacion("Advertencia", "Falta ingresar el codigo", TrayIcon.MessageType.WARNING);
 			fallas = true;
 		}
 
 		// comprobando si existe el alumno previamente
 		if (elCodigoEsRepetido(codigo.getText())) {
-			logger.atWarning().log("El alumno ya ha sido ingresado");
+			//logger.atWarning().log("El alumno ya ha sido ingresado");
+                        WinNotification.mostrarNotificacion("Advertencia", "El alumno ya ha sido ingresado", TrayIcon.MessageType.WARNING);
 			fallas = true;
 		}
 
 		// comprobando el DNI
 		if (dni.getText().isEmpty()) {
-			logger.atWarning().log("Falta ingresar el DNI");
+			//logger.atWarning().log("Falta ingresar el DNI");
+                        WinNotification.mostrarNotificacion("Advertencia", "Falta ingresar el DNI", TrayIcon.MessageType.WARNING);
 			fallas = true;
 		} else {
 			// Acá un métodos mas efectivo es solo ver la cantidad de caracteres
 			int size = dni.getText().trim().length();
 			if (size != 8) {
-				logger.atWarning().log("El DNI ingresado no tiene 8 numerós");
+				//logger.atWarning().log("El DNI ingresado no tiene 8 numerós");
+                                WinNotification.mostrarNotificacion("Advertencia", "El DNI ingresado no tiene 8 numeros", TrayIcon.MessageType.WARNING);
 				fallas = true;
 			}
 		}
@@ -788,13 +809,15 @@ public final class IngresarAlumno extends JDialog {
 
 		// Comprobando escuelas
 		if (escuelas.getSelectedIndex() == -1) {
-			logger.atWarning().log("Falta seleccionar una escuela");
+			//logger.atWarning().log("Falta seleccionar una escuela");
+                        WinNotification.mostrarNotificacion("Advertencia", "Falta seleccionar una escuela", TrayIcon.MessageType.WARNING);
 			fallas = true;
 		}
 
 		// comprobando estado
 		if (!((noPobre.isSelected() || pobre.isSelected()) || pobreExtremo.isSelected())) {
-			logger.atWarning().log("Falta seleccionar una clasificación del SIS");
+			//logger.atWarning().log("Falta seleccionar una clasificación del SIS");
+                        WinNotification.mostrarNotificacion("Advertencia", "Falta seleccionar una clasificacion del SIS", TrayIcon.MessageType.WARNING);
 			listo = false;
 		}
 
