@@ -17,6 +17,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import static java.awt.Frame.NORMAL;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * @author Lenovo
@@ -29,6 +34,7 @@ public final class IngresarAlumno extends JDialog {
 	 */
 	String[] nombreEscuela;
 	int[] idEscuela;
+        String nomopciones;
 	/**
 	 * booleano para saber si ya se puede proceder con el agregado
 	 */
@@ -47,6 +53,9 @@ public final class IngresarAlumno extends JDialog {
 	JLabel dniLabel = new JLabel("*DNI:");
 	JLabel estadoLabel = new JLabel("*Estado:");
 	JLabel direccionLabel = new JLabel("Direcci贸n:");
+        JLabel opcionesLabel = new JLabel("Eliga una opci髇 para buscar");
+        JLabel etiqContadorLabel = new JLabel("Alumnos encontrados:");
+        JLabel ContadorLabel = new JLabel("0");
 
 	/**
 	 * JTextFields usados para que el usuario pueda registrar
@@ -56,6 +65,7 @@ public final class IngresarAlumno extends JDialog {
 	JTextField codigo = new JTextField();
 	JTextField dni = new JTextField();
 	JTextField direccion = new JTextField();
+        JTextField buscador= new JTextField();
 
 	/**
 	 * JButtons usados para implementar lo deseado
@@ -68,6 +78,7 @@ public final class IngresarAlumno extends JDialog {
 	 * JCombobox usado para mostrar las posibles escuelas
 	 */
 	JComboBox<String> escuelas = new JComboBox<>();
+        JComboBox<String> opciones = new JComboBox<>();
 
 	/**
 	 * JRadioButtons para las opciones del sisfoh
@@ -75,7 +86,13 @@ public final class IngresarAlumno extends JDialog {
 	JRadioButton noPobre = new JRadioButton("No pobre");
 	JRadioButton pobre = new JRadioButton("Pobre");
 	JRadioButton pobreExtremo = new JRadioButton("Pobre extremo");
-
+        
+        /**
+         * JTable para visualizar la busqueda
+         */
+        JTable tabla = new JTable();
+        JScrollPane scrolltabla = new javax.swing.JScrollPane();
+        
 	/**
 	 * JPanel para ayudar en la muestra de los objetos
 	 */
@@ -88,8 +105,8 @@ public final class IngresarAlumno extends JDialog {
 	public IngresarAlumno(JFrame padre) {
 		super(padre, true);
 		this.padre = padre;
-		setSize(800, 500);
-		setLocation(200, 200);
+		setSize(1000, 600);
+                setLocationRelativeTo(null);
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 
@@ -98,7 +115,8 @@ public final class IngresarAlumno extends JDialog {
 
 		// llamando al m茅todo  para llenar el JComboBox
 		llenandoEscuelas(escuelas);
-
+                llenandoOpciones(opciones);
+                
 		setupLayout();
 	}
 
@@ -350,13 +368,31 @@ public final class IngresarAlumno extends JDialog {
 				//Ignorado
 			}
 		});
+                
+                //accion para comenzar la busqueda
+                buscador.addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        try {
+                            buscar(buscador,nomopciones);
+                        } catch (SQLException ex) {
+                            System.err.println("no se logro buscar");
+                        }
+                                            
+                    }
+                });
 	}
 
 	private void addActionListeners() {
-		// acci贸n utilizada para cambiar su edici贸n
-		nombre.addActionListener(e -> {
-			//TODO: esto es correcto que este en blanco?
-		});
+		
 
 		// m茅todo creado por su servidor para que solo se seleccione un JRadioButton
 		// Si se ponen estos botones un un grupo (creo que asi se llama) solo permite seleccionar uno sin necesidad de esto
@@ -389,6 +425,20 @@ public final class IngresarAlumno extends JDialog {
 			pobreExtremo.setSelected(false);
 		});
 
+                //activar buscador
+                opciones.addActionListener(e -> {
+                        buscador.setEnabled(true);
+                        buscador.setText("");
+                        int aux=opciones.getSelectedIndex();
+                        switch(aux){
+                            case 0: nomopciones="CODIGO";break;
+                            case 1: nomopciones="DNI";break;
+                            case 2: nomopciones="NOMBRE";break;
+                            case 3: nomopciones="APELLIDOS";break;   
+                        }
+                        
+                });
+                
 		// Bot贸n usado para llamar al m茅todo agregando
 		agregar.addActionListener(e -> agregarUsuario());
 
@@ -421,93 +471,132 @@ public final class IngresarAlumno extends JDialog {
 		panelPrincipal.add(limpiar);
 		panelPrincipal.add(cancelar);
 		panelPrincipal.add(agregar);
-		panelPrincipal.setSize(800, 500);
+                panelPrincipal.add(opcionesLabel);
+                panelPrincipal.add(opciones);
+                panelPrincipal.add(buscador);
+                panelPrincipal.add(etiqContadorLabel);
+                panelPrincipal.add(ContadorLabel);
+                panelPrincipal.add(tabla);
+                panelPrincipal.add(scrolltabla);
+		panelPrincipal.setSize(1000, 600);
 
 		// a cada objeto se le da sus par谩metros
-		encabezadoLabel.setSize(300, 25);
+		encabezadoLabel.setSize(300, 30);
 		encabezadoLabel.setLocation(300, 10);
 		encabezadoLabel.setVisible(true);
 
-		requerimientoLabel.setSize(450, 25);
-		requerimientoLabel.setLocation(20, 40);
+		requerimientoLabel.setSize(450, 30);
+		requerimientoLabel.setLocation(20, 45);
 		requerimientoLabel.setVisible(true);
 
-		nombreLabel.setSize(100, 25);
-		nombreLabel.setLocation(20, 80);
+		nombreLabel.setSize(100, 30);
+		nombreLabel.setLocation(20, 90);
 		nombreLabel.setVisible(true);
 
-		nombre.setSize(250, 25);
-		nombre.setLocation(100, 80);
+		nombre.setSize(250, 30);
+		nombre.setLocation(100, 90);
 		nombre.setVisible(true);
 
-		apellidoLabel.setSize(100, 25);
-		apellidoLabel.setLocation(420, 80);
+		apellidoLabel.setSize(100, 30);
+		apellidoLabel.setLocation(420, 90);
 		apellidoLabel.setVisible(true);
 
-		apellido.setSize(250, 25);
-		apellido.setLocation(500, 80);
+		apellido.setSize(250, 30);
+		apellido.setLocation(500, 90);
 		apellido.setVisible(true);
 
-		codigoLabel.setSize(80, 25);
-		codigoLabel.setLocation(20, 120);
+		codigoLabel.setSize(80, 30);
+		codigoLabel.setLocation(20, 125);
 		codigoLabel.setVisible(true);
 
-		codigo.setSize(100, 25);
-		codigo.setLocation(100, 120);
+		codigo.setSize(100, 30);
+		codigo.setLocation(100, 125);
 		codigo.setVisible(true);
 
-		dniLabel.setSize(100, 25);
-		dniLabel.setLocation(420, 120);
+		dniLabel.setSize(100, 30);
+		dniLabel.setLocation(420, 125);
 		dniLabel.setVisible(true);
 
-		dni.setSize(100, 25);
-		dni.setLocation(500, 120);
+		dni.setSize(100, 30);
+		dni.setLocation(500, 125);
 		dni.setVisible(true);
 
-		escuelaLabel.setSize(80, 25);
+		escuelaLabel.setSize(80, 30);
 		escuelaLabel.setLocation(20, 160);
 		escuelaLabel.setVisible(true);
 
-		escuelas.setSize(200, 25);
+		escuelas.setSize(200, 30);
 		escuelas.setLocation(100, 160);
 		escuelas.setVisible(true);
 
-		estadoLabel.setSize(100, 25);
+		estadoLabel.setSize(100, 30);
 		estadoLabel.setLocation(320, 160);
 		estadoLabel.setVisible(true);
 
-		noPobre.setSize(100, 25);
+		noPobre.setSize(100, 30);
 		noPobre.setLocation(400, 160);
 		noPobre.setVisible(true);
 
-		pobre.setSize(100, 25);
+		pobre.setSize(100, 30);
 		pobre.setLocation(500, 160);
 		pobre.setVisible(true);
 
-		pobreExtremo.setSize(200, 25);
+		pobreExtremo.setSize(200, 30);
 		pobreExtremo.setLocation(600, 160);
 		pobreExtremo.setVisible(true);
 
-		direccionLabel.setSize(100, 25);
+		direccionLabel.setSize(100, 30);
 		direccionLabel.setLocation(20, 200);
 		direccionLabel.setVisible(true);
 
-		direccion.setSize(450, 25);
+		direccion.setSize(450, 30);
 		direccion.setLocation(100, 200);
 		direccion.setVisible(true);
 
-		limpiar.setSize(100, 25);
-		limpiar.setLocation(350, 350);
+		limpiar.setSize(100, 30);
+		limpiar.setLocation(350, 250);
 		limpiar.setVisible(true);
 
-		agregar.setSize(100, 25);
-		agregar.setLocation(500, 350);
+		agregar.setSize(100, 30);
+		agregar.setLocation(500, 250);
 		agregar.setVisible(true);
 
-		cancelar.setSize(100, 25);
-		cancelar.setLocation(650, 350);
+		cancelar.setSize(100, 30);
+		cancelar.setLocation(650, 250);
 		cancelar.setVisible(true);
-
+                
+                opcionesLabel.setSize(200,30);
+                opcionesLabel.setLocation(20,285);
+                opcionesLabel.setVisible(true);
+                
+                opciones.setSize(100, 30);
+                opciones.setLocation(230,285);
+                opciones.setVisible(true);
+                
+                buscador.setSize(500, 30);
+                buscador.setLocation(20, 320);
+                buscador.setVisible(true);
+                buscador.setEnabled(false);
+                
+                etiqContadorLabel.setSize(150, 30);
+                etiqContadorLabel.setLocation(770, 320);
+                etiqContadorLabel.setVisible(true);
+                
+                ContadorLabel.setSize(50, 30);
+                ContadorLabel.setLocation(930, 320);
+                ContadorLabel.setVisible(true);
+                
+                tabla.setSize(960, 200);
+                tabla.setLocation(20, 355);
+                tabla.setVisible(true);
+                tabla.setEnabled(false);
+                
+                scrolltabla.setViewportView(tabla);
+                scrolltabla.setSize(960, 200);
+                scrolltabla.setLocation(20, 355);
+                scrolltabla.setVisible(true);
+                
+                
 		add(panelPrincipal);
 	}
 
@@ -539,6 +628,82 @@ public final class IngresarAlumno extends JDialog {
 			logger.atSevere().withStackTrace(StackSize.FULL).withCause(e).log("Hubo un error al llenar las escuelas");
 		}
 	}
+        
+        /**
+         * usado para llenar el combo opciones
+         * @param comboBox 
+         */
+        public void llenandoOpciones(JComboBox<String> comboBox){
+                String lasopciones[] = new String[4]; 
+		lasopciones[0]="Codigo";
+                lasopciones[1]="DNI";
+                lasopciones[2]="Nombre";
+                lasopciones[3]="Apellido";
+                comboBox.setModel(new javax.swing.DefaultComboBoxModel<>(lasopciones));
+		comboBox.setSelectedIndex(-1);
+				
+        }
+        
+        /**
+         * usado para buscar lo ingresado en el TextField
+         * @param buscado
+         * @param columna
+         * @throws SQLException 
+         */
+        public void buscar(JTextField buscado,String columna) throws SQLException{
+            
+    DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(
+                    new Object [][] {
+                    },
+                    new String [] {
+                     "Codigo", "DNI","Nombre","Apellido","Direccion","Entrega de chip","Entrega de laptop"
+                    }
+    ){
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,java.lang.String.class,java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                
+                return types [columnIndex];
+            }
+        };
+    tabla.setModel(modelo);
+    PreparedStatement ps=null;
+    ResultSet rs=null;
+    
+    String sql= "SELECT * FROM ESTUDIANTES WHERE "+columna+" LIKE '%"+buscado.getText()+"%'";   
+    ps=con.prepareStatement(sql);
+    rs=ps.executeQuery();
+    ResultSetMetaData abc = rs.getMetaData();
+    int cantcolum=abc.getColumnCount();
+    int cant=contarLineasEnTabla("ESTUDIANTES");
+    String nomexi[] = new String[cant];
+    int cont=0;
+    while(rs.next()){
+        boolean exis=false;
+        Object filas[] = new Object[cantcolum];
+        
+        for(int i=0;i<cantcolum;i++){ 
+            filas[i]=rs.getObject(i+1);              
+    }
+   nomexi[cont]=(String) filas[0];
+   cont++;
+   if(!exis)
+  modelo.addRow(filas);
+   int cantfinal=modelo.getRowCount();
+   ContadorLabel.setText(""+cantfinal);
+   tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+   tabla.getColumnModel().getColumn(0).setPreferredWidth(80);
+   tabla.getColumnModel().getColumn(1).setPreferredWidth(80);
+   tabla.getColumnModel().getColumn(2).setPreferredWidth(80);
+   tabla.getColumnModel().getColumn(3).setPreferredWidth(200);
+   tabla.getColumnModel().getColumn(4).setPreferredWidth(250);
+   tabla.getColumnModel().getColumn(5).setPreferredWidth(125);
+   tabla.getColumnModel().getColumn(6).setPreferredWidth(125);
+    }
+    
+}
 
 	/**
 	 * usado para corroborar que todas las casillas est茅n completas y mandar al procedure
@@ -642,5 +807,6 @@ public final class IngresarAlumno extends JDialog {
 		padre.setExtendedState(NORMAL);
 		super.dispose();
 	}
+        
 
 }
