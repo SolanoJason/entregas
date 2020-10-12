@@ -8,23 +8,17 @@ package ventanas;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.flogger.StackSize;
 import custom_beans.WinNotification;
-import java.awt.AWTException;
 import sql.ConexionPool;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.*;
 import java.util.Objects;
 
 import static java.awt.Frame.NORMAL;
-import java.awt.TrayIcon;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * @author Lenovo
@@ -68,7 +62,7 @@ public final class IngresarAlumno extends JDialog {
 	JTextField codigo = new JTextField();
 	JTextField dni = new JTextField();
 	JTextField direccion = new JTextField();
-        JTextField buscador= new JTextField();
+	JTextField buscador = new JTextField();
 
 	/**
 	 * JButtons usados para implementar lo deseado
@@ -367,11 +361,11 @@ public final class IngresarAlumno extends JDialog {
 				}
 				// presionar
 				if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-                                    try {
-                                        agregarUsuario();
-                                    } catch (AWTException ex) {
-                                        System.err.println("no se pudo agregar el usuario");
-                                    }
+					try {
+						agregarUsuario();
+					} catch (AWTException ex) {
+						System.err.println("no se pudo agregar el usuario");
+					}
 				}
 			}
 
@@ -406,7 +400,6 @@ public final class IngresarAlumno extends JDialog {
 	}
 
 	private void addActionListeners() {
-		
 
 		// método creado por su servidor para que solo se seleccione un JRadioButton
 		// Si se ponen estos botones un un grupo (creo que asi se llama) solo permite seleccionar uno sin necesidad de esto
@@ -461,12 +454,12 @@ public final class IngresarAlumno extends JDialog {
 
 		// Botón usado para llamar al método agregando
 		agregar.addActionListener(e -> {
-                    try {
-                        agregarUsuario();
-                    } catch (AWTException ex) {
-                        System.err.println("no se pudo agregar al usuario");
-                    }
-                });
+			try {
+				agregarUsuario();
+			} catch (AWTException ex) {
+				System.err.println("no se pudo agregar al usuario");
+			}
+		});
 
 		// Botón usado para llamar al método dispose
 		cancelar.addActionListener(e -> dispose());
@@ -672,7 +665,7 @@ public final class IngresarAlumno extends JDialog {
 		};
 		tabla.setModel(modelo);
 
-		String sql = String.format("SELECT * FROM ESTUDIANTES WHERE %s LIKE '%%%s%%'", columna, buscado.getText());
+		String sql = String.format("SELECT * FROM mydb.ESTUDIANTES WHERE %s LIKE '%%%s%%'", columna, buscado.getText());
 		try (Connection connection = ConexionPool.getConnection()) {
 			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 				try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -745,8 +738,8 @@ public final class IngresarAlumno extends JDialog {
 				agregando(codigoIngresado, idEscuelaIngresado, dniIngresado, sisfoh, direcc, nombreIngresado, apellidoIngresado);
 			}
 		} else {
-			//logger.atSevere().log("No se ingreso al usuario %s", nombre.getText());
-                        WinNotification.mostrarNotificacion("Advertencia", "Falta ingresar el nombre", TrayIcon.MessageType.ERROR);
+			logger.atSevere().log("No se ingreso al usuario %s", nombre.getText());
+			WinNotification.mostrarNotificacion("Advertencia", "Falta ingresar el nombre", TrayIcon.MessageType.ERROR);
 		}
 
 	}
@@ -756,7 +749,7 @@ public final class IngresarAlumno extends JDialog {
 	 * <p>
 	 * Es mejor retornar un boolean a usar una variable del objeto, es mas entendible, ademas que limita los efectos secundarios
 	 */
-	public boolean todoCorrecto() {
+	public boolean todoCorrecto() throws AWTException {
 		boolean fallas = false;
 		// comprobando nombre
 		if (nombre.getText().isEmpty()) {
@@ -781,22 +774,22 @@ public final class IngresarAlumno extends JDialog {
 
 		// comprobando si existe el alumno previamente
 		if (elCodigoEsRepetido(codigo.getText())) {
-			//logger.atWarning().log("El alumno ya ha sido ingresado");
-                        WinNotification.mostrarNotificacion("Advertencia", "El alumno ya ha sido ingresado", TrayIcon.MessageType.WARNING);
+			logger.atWarning().log("El alumno ya ha sido ingresado");
+			WinNotification.mostrarNotificacion("Advertencia", "El alumno ya ha sido ingresado", TrayIcon.MessageType.WARNING);
 			fallas = true;
 		}
 
 		// comprobando el DNI
 		if (dni.getText().isEmpty()) {
-			//logger.atWarning().log("Falta ingresar el DNI");
-                        WinNotification.mostrarNotificacion("Advertencia", "Falta ingresar el DNI", TrayIcon.MessageType.WARNING);
+			logger.atWarning().log("Falta ingresar el DNI");
+			WinNotification.mostrarNotificacion("Advertencia", "Falta ingresar el DNI", TrayIcon.MessageType.WARNING);
 			fallas = true;
 		} else {
 			// Acá un métodos mas efectivo es solo ver la cantidad de caracteres
 			int size = dni.getText().trim().length();
 			if (size != 8) {
-				//logger.atWarning().log("El DNI ingresado no tiene 8 numerós");
-                                WinNotification.mostrarNotificacion("Advertencia", "El DNI ingresado no tiene 8 numeros", TrayIcon.MessageType.WARNING);
+				logger.atWarning().log("El DNI ingresado no tiene 8 numerós");
+				WinNotification.mostrarNotificacion("Advertencia", "El DNI ingresado no tiene 8 numeros", TrayIcon.MessageType.WARNING);
 				fallas = true;
 			}
 		}
@@ -805,15 +798,15 @@ public final class IngresarAlumno extends JDialog {
 
 		// Comprobando escuelas
 		if (escuelas.getSelectedIndex() == -1) {
-			//logger.atWarning().log("Falta seleccionar una escuela");
-                        WinNotification.mostrarNotificacion("Advertencia", "Falta seleccionar una escuela", TrayIcon.MessageType.WARNING);
+			logger.atWarning().log("Falta seleccionar una escuela");
+			WinNotification.mostrarNotificacion("Advertencia", "Falta seleccionar una escuela", TrayIcon.MessageType.WARNING);
 			fallas = true;
 		}
 
 		// comprobando estado
 		if (!((noPobre.isSelected() || pobre.isSelected()) || pobreExtremo.isSelected())) {
-			//logger.atWarning().log("Falta seleccionar una clasificación del SIS");
-                        WinNotification.mostrarNotificacion("Advertencia", "Falta seleccionar una clasificacion del SIS", TrayIcon.MessageType.WARNING);
+			logger.atWarning().log("Falta seleccionar una clasificación del SIS");
+			WinNotification.mostrarNotificacion("Advertencia", "Falta seleccionar una clasificacion del SIS", TrayIcon.MessageType.WARNING);
 			listo = false;
 		}
 
