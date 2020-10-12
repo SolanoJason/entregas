@@ -10,18 +10,13 @@ import com.google.common.flogger.StackSize;
 import sql.ConexionPool;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.Objects;
 
 import static java.awt.Frame.NORMAL;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * @author Lenovo
@@ -34,7 +29,7 @@ public final class IngresarAlumno extends JDialog {
 	 */
 	String[] nombreEscuela;
 	int[] idEscuela;
-        String nomopciones;
+	String nombreOpciones;
 	/**
 	 * booleano para saber si ya se puede proceder con el agregado
 	 */
@@ -53,9 +48,9 @@ public final class IngresarAlumno extends JDialog {
 	JLabel dniLabel = new JLabel("*DNI:");
 	JLabel estadoLabel = new JLabel("*Estado:");
 	JLabel direccionLabel = new JLabel("Dirección:");
-        JLabel opcionesLabel = new JLabel("Eliga una opci�n para buscar");
-        JLabel etiqContadorLabel = new JLabel("Alumnos encontrados:");
-        JLabel ContadorLabel = new JLabel("0");
+	JLabel opcionesLabel = new JLabel("Eliga una opci�n para buscar");
+	JLabel etiqContadorLabel = new JLabel("Alumnos encontrados:");
+	JLabel contadorLabel = new JLabel("0");
 
 	/**
 	 * JTextFields usados para que el usuario pueda registrar
@@ -65,7 +60,7 @@ public final class IngresarAlumno extends JDialog {
 	JTextField codigo = new JTextField();
 	JTextField dni = new JTextField();
 	JTextField direccion = new JTextField();
-        JTextField buscador= new JTextField();
+	JTextField buscador = new JTextField();
 
 	/**
 	 * JButtons usados para implementar lo deseado
@@ -78,7 +73,7 @@ public final class IngresarAlumno extends JDialog {
 	 * JCombobox usado para mostrar las posibles escuelas
 	 */
 	JComboBox<String> escuelas = new JComboBox<>();
-        JComboBox<String> opciones = new JComboBox<>();
+	JComboBox<OpcionesBusqueda> opciones = new JComboBox<>();
 
 	/**
 	 * JRadioButtons para las opciones del sisfoh
@@ -86,13 +81,13 @@ public final class IngresarAlumno extends JDialog {
 	JRadioButton noPobre = new JRadioButton("No pobre");
 	JRadioButton pobre = new JRadioButton("Pobre");
 	JRadioButton pobreExtremo = new JRadioButton("Pobre extremo");
-        
-        /**
-         * JTable para visualizar la busqueda
-         */
-        JTable tabla = new JTable();
-        JScrollPane scrolltabla = new javax.swing.JScrollPane();
-        
+
+	/**
+	 * JTable para visualizar la busqueda
+	 */
+	JTable tabla = new JTable();
+	JScrollPane scrolltabla = new javax.swing.JScrollPane();
+
 	/**
 	 * JPanel para ayudar en la muestra de los objetos
 	 */
@@ -106,7 +101,7 @@ public final class IngresarAlumno extends JDialog {
 		super(padre, true);
 		this.padre = padre;
 		setSize(1000, 600);
-                setLocationRelativeTo(null);
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 
@@ -115,8 +110,8 @@ public final class IngresarAlumno extends JDialog {
 
 		// llamando al método  para llenar el JComboBox
 		llenandoEscuelas(escuelas);
-                llenandoOpciones(opciones);
-                
+		llenandoOpciones(opciones);
+
 		setupLayout();
 	}
 
@@ -162,7 +157,7 @@ public final class IngresarAlumno extends JDialog {
 	 */
 	public static void agregando(String codigo, int escuela, String dni, String sis, String direccion, String nombre, String apellido) {
 		try (Connection connection = ConexionPool.getConnection()) {
-			String sql = "call registrar_alumno('" + codigo + "','" + escuela + "','" + dni + "','" + sis + "','" + direccion + "','" + nombre + "','" + apellido + "')";
+			String sql = String.format("CALL registrar_alumno('%s','%d','%s','%s','%s','%s','%s')", codigo, escuela, dni, sis, direccion, nombre, apellido);
 			try (PreparedStatement ps = connection.prepareStatement(sql)) {
 				try (ResultSet ignored = ps.executeQuery()) {
 					logger.atFiner().log("Alumno agregado");
@@ -247,6 +242,16 @@ public final class IngresarAlumno extends JDialog {
 		return comp;
 	}
 
+	/**
+	 * usado para llenar el combo opciones
+	 *
+	 * @param comboBox combo a rellenar
+	 */
+	public static void llenandoOpciones(JComboBox<OpcionesBusqueda> comboBox) {
+		comboBox.setModel(new DefaultComboBoxModel<>(OpcionesBusqueda.values()));
+		comboBox.setSelectedIndex(-1);
+	}
+
 	private void addKeyListeners() {
 		// acción para poder pasar a la casilla apellido
 		siguienteTextField(nombre, apellido);
@@ -297,7 +302,7 @@ public final class IngresarAlumno extends JDialog {
 		});
 
 		// acción utilizada para cambiar su edición
-		// (released) acción para poder pasar al Jcombobox
+		// (released) acción para poder pasar al JCombobox
 		// (released,pressed) acción para poder restringir solo números
 		dni.addKeyListener(new KeyListener() {
 			int aux;
@@ -368,31 +373,27 @@ public final class IngresarAlumno extends JDialog {
 				//Ignorado
 			}
 		});
-                
-                //accion para comenzar la busqueda
-                buscador.addKeyListener(new KeyListener() {
-                    @Override
-                    public void keyTyped(KeyEvent e) {
-                        }
 
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        }
+		//accion para comenzar la busqueda
+		buscador.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// ignorado
+			}
 
-                    @Override
-                    public void keyReleased(KeyEvent e) {
-                        try {
-                            buscar(buscador,nomopciones);
-                        } catch (SQLException ex) {
-                            System.err.println("no se logro buscar");
-                        }
-                                            
-                    }
-                });
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// ignorado
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				buscar(buscador, nombreOpciones);
+			}
+		});
 	}
 
 	private void addActionListeners() {
-		
 
 		// método creado por su servidor para que solo se seleccione un JRadioButton
 		// Si se ponen estos botones un un grupo (creo que asi se llama) solo permite seleccionar uno sin necesidad de esto
@@ -425,25 +426,60 @@ public final class IngresarAlumno extends JDialog {
 			pobreExtremo.setSelected(false);
 		});
 
-                //activar buscador
-                opciones.addActionListener(e -> {
-                        buscador.setEnabled(true);
-                        buscador.setText("");
-                        int aux=opciones.getSelectedIndex();
-                        switch(aux){
-                            case 0: nomopciones="CODIGO";break;
-                            case 1: nomopciones="DNI";break;
-                            case 2: nomopciones="NOMBRE";break;
-                            case 3: nomopciones="APELLIDOS";break;   
-                        }
-                        
-                });
-                
+		//activar buscador
+		opciones.addActionListener(e -> {
+			buscador.setEnabled(true);
+			buscador.setText("");
+			switch ((OpcionesBusqueda) Objects.requireNonNull(opciones.getSelectedItem())) {
+				case Codigo:
+					nombreOpciones = "CODIGO";
+					break;
+				case DNI:
+					nombreOpciones = "DNI";
+					break;
+				case Nombre:
+					nombreOpciones = "NOMBRE";
+					break;
+				case Apellido:
+					nombreOpciones = "APELLIDOS";
+					break;
+			}
+		});
+
 		// Botón usado para llamar al método agregando
 		agregar.addActionListener(e -> agregarUsuario());
 
 		// Botón usado para llamar al método dispose
 		cancelar.addActionListener(e -> dispose());
+	}
+
+	/**
+	 * usado para llenar un combo con las escuelas de la base de datos
+	 *
+	 * @param comboBox combo box a ser llenado
+	 */
+	public void llenandoEscuelas(JComboBox<String> comboBox) {
+		int cont = contarLineasEnTabla("escuela");
+		nombreEscuela = new String[cont];
+		idEscuela = new int[cont];
+		try (Connection connection = ConexionPool.getConnection()) {
+			String sql = "SELECT * FROM escuela";
+			try (PreparedStatement ps = connection.prepareStatement(sql)) {
+				try (ResultSet rs = ps.executeQuery()) {
+					int cont2 = 0;
+					while (rs.next()) {
+						nombreEscuela[cont2] = rs.getString(2);
+						idEscuela[cont2] = rs.getInt(1);
+						cont2++;
+					}
+					comboBox.setModel(new javax.swing.DefaultComboBoxModel<>(nombreEscuela));
+					comboBox.setSelectedIndex(-1);
+				}
+			}
+		} catch (Exception e) {
+			//No ignorar las excepciones, ingresarlas al log, en caso de un error se puede saber que paso mal
+			logger.atSevere().withStackTrace(StackSize.FULL).withCause(e).log("Hubo un error al llenar las escuelas");
+		}
 	}
 
 	private void setupLayout() {
@@ -471,13 +507,13 @@ public final class IngresarAlumno extends JDialog {
 		panelPrincipal.add(limpiar);
 		panelPrincipal.add(cancelar);
 		panelPrincipal.add(agregar);
-                panelPrincipal.add(opcionesLabel);
-                panelPrincipal.add(opciones);
-                panelPrincipal.add(buscador);
-                panelPrincipal.add(etiqContadorLabel);
-                panelPrincipal.add(ContadorLabel);
-                panelPrincipal.add(tabla);
-                panelPrincipal.add(scrolltabla);
+		panelPrincipal.add(opcionesLabel);
+		panelPrincipal.add(opciones);
+		panelPrincipal.add(buscador);
+		panelPrincipal.add(etiqContadorLabel);
+		panelPrincipal.add(contadorLabel);
+		panelPrincipal.add(tabla);
+		panelPrincipal.add(scrolltabla);
 		panelPrincipal.setSize(1000, 600);
 
 		// a cada objeto se le da sus parámetros
@@ -564,146 +600,101 @@ public final class IngresarAlumno extends JDialog {
 		cancelar.setSize(100, 30);
 		cancelar.setLocation(650, 250);
 		cancelar.setVisible(true);
-                
-                opcionesLabel.setSize(200,30);
-                opcionesLabel.setLocation(20,285);
-                opcionesLabel.setVisible(true);
-                
-                opciones.setSize(100, 30);
-                opciones.setLocation(230,285);
-                opciones.setVisible(true);
-                
-                buscador.setSize(500, 30);
-                buscador.setLocation(20, 320);
-                buscador.setVisible(true);
-                buscador.setEnabled(false);
-                
-                etiqContadorLabel.setSize(150, 30);
-                etiqContadorLabel.setLocation(770, 320);
-                etiqContadorLabel.setVisible(true);
-                
-                ContadorLabel.setSize(50, 30);
-                ContadorLabel.setLocation(930, 320);
-                ContadorLabel.setVisible(true);
-                
-                tabla.setSize(960, 200);
-                tabla.setLocation(20, 355);
-                tabla.setVisible(true);
-                tabla.setEnabled(false);
-                
-                scrolltabla.setViewportView(tabla);
-                scrolltabla.setSize(960, 200);
-                scrolltabla.setLocation(20, 355);
-                scrolltabla.setVisible(true);
-                
-                
+
+		opcionesLabel.setSize(200, 30);
+		opcionesLabel.setLocation(20, 285);
+		opcionesLabel.setVisible(true);
+
+		opciones.setSize(100, 30);
+		opciones.setLocation(230, 285);
+		opciones.setVisible(true);
+
+		buscador.setSize(500, 30);
+		buscador.setLocation(20, 320);
+		buscador.setVisible(true);
+		buscador.setEnabled(false);
+
+		etiqContadorLabel.setSize(150, 30);
+		etiqContadorLabel.setLocation(770, 320);
+		etiqContadorLabel.setVisible(true);
+
+		contadorLabel.setSize(50, 30);
+		contadorLabel.setLocation(930, 320);
+		contadorLabel.setVisible(true);
+
+		tabla.setSize(960, 200);
+		tabla.setLocation(20, 355);
+		tabla.setVisible(true);
+		tabla.setEnabled(false);
+
+		scrolltabla.setViewportView(tabla);
+		scrolltabla.setSize(960, 200);
+		scrolltabla.setLocation(20, 355);
+		scrolltabla.setVisible(true);
+
 		add(panelPrincipal);
 	}
 
 	/**
-	 * usado para llenar un combo con las escuelas de la base de datos
+	 * usado para buscar lo ingresado en el TextField
 	 *
-	 * @param comboBox combo box a ser llenado
+	 * @param buscado El textField del que se extrae lo que se quiere buscar
+	 * @param columna La columna en la que se quiere buscar
 	 */
-	public void llenandoEscuelas(JComboBox<String> comboBox) {
-		int cont = contarLineasEnTabla("escuela");
-		nombreEscuela = new String[cont];
-		idEscuela = new int[cont];
+	public void buscar(JTextField buscado, String columna) {
+
+		DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Codigo", "DNI", "Nombre", "Apellido", "Direccion", "Entrega de chip", "Entrega de laptop"}) {
+			final Class[] types = {String.class, String.class, String.class, String.class, String.class, String.class, String.class};
+
+			@Override
+			public Class getColumnClass(int columnIndex) {
+				return types[columnIndex];
+			}
+		};
+		tabla.setModel(modelo);
+
+		String sql = String.format("SELECT * FROM ESTUDIANTES WHERE %s LIKE '%%%s%%'", columna, buscado.getText());
 		try (Connection connection = ConexionPool.getConnection()) {
-			String sql = "SELECT * FROM escuela";
-			try (PreparedStatement ps = connection.prepareStatement(sql)) {
-				try (ResultSet rs = ps.executeQuery()) {
-					int cont2 = 0;
-					while (rs.next()) {
-						nombreEscuela[cont2] = rs.getString(2);
-						idEscuela[cont2] = rs.getInt(1);
-						cont2++;
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				try (ResultSet resultSet = preparedStatement.executeQuery()) {
+					ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+					int cantidadColumnas = resultSetMetaData.getColumnCount();
+					int cantidadLineasEstudiante = contarLineasEnTabla("ESTUDIANTES");
+					String[] nombresObtenidos = new String[cantidadLineasEstudiante];
+					int contador = 0;
+					while (resultSet.next()) {
+						boolean exis = false;
+						Object[] filas = new Object[cantidadColumnas];
+
+						for (int i = 0; i < cantidadColumnas; i++) {
+							filas[i] = resultSet.getObject(i + 1);
+						}
+						nombresObtenidos[contador] = (String) filas[0];
+						contador++;
+						if (!exis)
+							modelo.addRow(filas);
+						int cantfinal = modelo.getRowCount();
+						contadorLabel.setText(String.valueOf(cantfinal));
+						tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+						tabla.getColumnModel().getColumn(0).setPreferredWidth(80);
+						tabla.getColumnModel().getColumn(1).setPreferredWidth(80);
+						tabla.getColumnModel().getColumn(2).setPreferredWidth(80);
+						tabla.getColumnModel().getColumn(3).setPreferredWidth(200);
+						tabla.getColumnModel().getColumn(4).setPreferredWidth(250);
+						tabla.getColumnModel().getColumn(5).setPreferredWidth(125);
+						tabla.getColumnModel().getColumn(6).setPreferredWidth(125);
 					}
-					comboBox.setModel(new javax.swing.DefaultComboBoxModel<>(nombreEscuela));
-					comboBox.setSelectedIndex(-1);
 				}
 			}
-		} catch (Exception e) {
-			//No ignorar las excepciones, ingresarlas al log, en caso de un error se puede saber que paso mal
-			logger.atSevere().withStackTrace(StackSize.FULL).withCause(e).log("Hubo un error al llenar las escuelas");
+		} catch (SQLException exception) {
+			logger.atSevere().withStackTrace(StackSize.FULL).withCause(exception).log("Hubo un error intetando buscar %s", buscado.getText());
 		}
-	}
-        
-        /**
-         * usado para llenar el combo opciones
-         * @param comboBox 
-         */
-        public void llenandoOpciones(JComboBox<String> comboBox){
-                String lasopciones[] = new String[4]; 
-		lasopciones[0]="Codigo";
-                lasopciones[1]="DNI";
-                lasopciones[2]="Nombre";
-                lasopciones[3]="Apellido";
-                comboBox.setModel(new javax.swing.DefaultComboBoxModel<>(lasopciones));
-		comboBox.setSelectedIndex(-1);
-				
-        }
-        
-        /**
-         * usado para buscar lo ingresado en el TextField
-         * @param buscado
-         * @param columna
-         * @throws SQLException 
-         */
-        public void buscar(JTextField buscado,String columna) throws SQLException{
-            
-    DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(
-                    new Object [][] {
-                    },
-                    new String [] {
-                     "Codigo", "DNI","Nombre","Apellido","Direccion","Entrega de chip","Entrega de laptop"
-                    }
-    ){
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class,java.lang.String.class,java.lang.String.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                
-                return types [columnIndex];
-            }
-        };
-    tabla.setModel(modelo);
-    PreparedStatement ps=null;
-    ResultSet rs=null;
-    
-    String sql= "SELECT * FROM ESTUDIANTES WHERE "+columna+" LIKE '%"+buscado.getText()+"%'";   
-    ps=con.prepareStatement(sql);
-    rs=ps.executeQuery();
-    ResultSetMetaData abc = rs.getMetaData();
-    int cantcolum=abc.getColumnCount();
-    int cant=contarLineasEnTabla("ESTUDIANTES");
-    String nomexi[] = new String[cant];
-    int cont=0;
-    while(rs.next()){
-        boolean exis=false;
-        Object filas[] = new Object[cantcolum];
-        
-        for(int i=0;i<cantcolum;i++){ 
-            filas[i]=rs.getObject(i+1);              
-    }
-   nomexi[cont]=(String) filas[0];
-   cont++;
-   if(!exis)
-  modelo.addRow(filas);
-   int cantfinal=modelo.getRowCount();
-   ContadorLabel.setText(""+cantfinal);
-   tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-   tabla.getColumnModel().getColumn(0).setPreferredWidth(80);
-   tabla.getColumnModel().getColumn(1).setPreferredWidth(80);
-   tabla.getColumnModel().getColumn(2).setPreferredWidth(80);
-   tabla.getColumnModel().getColumn(3).setPreferredWidth(200);
-   tabla.getColumnModel().getColumn(4).setPreferredWidth(250);
-   tabla.getColumnModel().getColumn(5).setPreferredWidth(125);
-   tabla.getColumnModel().getColumn(6).setPreferredWidth(125);
-    }
-    
-}
+	}
+
+	private enum OpcionesBusqueda {
+		Codigo, DNI, Nombre, Apellido
+	}
 
 	/**
 	 * usado para corroborar que todas las casillas estén completas y mandar al procedure
@@ -807,6 +798,6 @@ public final class IngresarAlumno extends JDialog {
 		padre.setExtendedState(NORMAL);
 		super.dispose();
 	}
-        
+
 
 }

@@ -6,7 +6,7 @@ import java.awt.TrayIcon.MessageType;
 public enum WinNotification {
 	;
 	private static final String NOMBRE_PROGRAMA = "Entrega de equipos";
-	private static final Image ICONO = Toolkit.getDefaultToolkit().createImage(ClassLoader.getSystemClassLoader().getResource("icons/iconounasam.png"));
+	private static final Image ICONO = Toolkit.getDefaultToolkit().createImage("src/main/resources/icons/iconounasam.png");
 	private static final SystemTray SYSTEM_TRAY = SystemTray.getSystemTray();
 
 	public static void mostrarNotificacion(String titulo, String contenido, MessageType tipo) throws AWTException {
