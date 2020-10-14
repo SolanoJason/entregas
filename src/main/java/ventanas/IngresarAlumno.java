@@ -436,6 +436,8 @@ public final class IngresarAlumno extends JDialog {
 		opciones.addActionListener(e -> {
 			buscador.setEnabled(true);
 			buscador.setText("");
+                        //solucion temporal para que habra la ventana
+                        if(! Objects.isNull(opciones.getSelectedItem())){
 			switch ((OpcionesBusqueda) Objects.requireNonNull(opciones.getSelectedItem())) {
 				case Codigo:
 					nombreOpciones = "CODIGO";
@@ -450,6 +452,8 @@ public final class IngresarAlumno extends JDialog {
 					nombreOpciones = "APELLIDOS";
 					break;
 			}
+                        }
+                        
 		});
 
 		// Botón usado para llamar al método agregando
