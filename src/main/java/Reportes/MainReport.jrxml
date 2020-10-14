@@ -3,6 +3,18 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<subDataset name="New Dataset 1_1" uuid="c18e8d56-4c1c-4bf3-bdc7-11b699f12e32">
+		<parameter name="escuelas" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT * FROM mydb.reporte_entrega order by escuela;]]>
+		</queryString>
+		<field name="Facultad" class="java.lang.String"/>
+		<field name="Escuela" class="java.lang.String"/>
+		<field name="Cantidad_chips" class="java.lang.Long"/>
+		<field name="Cantidad_laptop" class="java.lang.Long"/>
+	</subDataset>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>

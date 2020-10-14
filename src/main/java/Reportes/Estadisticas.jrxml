@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ea445f3c-a6a1-4596-86ab-bdc863a5de7d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="New Dataset 1" uuid="d49e80f9-acff-410c-afbb-811b160b3ada">
+		<parameter name="escuelas" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT * FROM mydb.reporte_entrega where escuela in ($P!{escuelas}) order by escuela;]]>
+		</queryString>
+		<field name="Facultad" class="java.lang.String"/>
+		<field name="Escuela" class="java.lang.String"/>
+		<field name="Cantidad_chips" class="java.lang.Long"/>
+		<field name="Cantidad_laptop" class="java.lang.Long"/>
+	</subDataset>
+	<parameter name="nomesc" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select 1;]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="802" height="79" uuid="4ab491df-29f2-41b2-a37b-ac309444d895"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estadisticas de chips y laptops entregados por las escuelas seleccionadas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<summary>
+		<band height="387" splitType="Stretch">
+			<stackedBar3DChart>
+				<chart isShowLegend="true" theme="default">
+					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="802" height="387" uuid="05f63ef5-639a-463e-9c59-f36719244f81"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Bottom"/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="New Dataset 1" uuid="99a4415d-2dce-41ef-8c24-88020bbdb59b">
+							<datasetParameter name="escuelas">
+								<datasetParameterExpression><![CDATA[$P{nomesc}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Chips entregados"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{Escuela}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{Cantidad_chips}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Laptops entregados"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{Escuela}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{Cantidad_laptop}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot isShowLabels="true">
+					<plot orientation="Horizontal" labelRotation="0.0"/>
+					<itemLabel/>
+					<categoryAxisFormat labelRotation="0.0">
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</bar3DPlot>
+			</stackedBar3DChart>
+		</band>
+	</summary>
+</jasperReport>
