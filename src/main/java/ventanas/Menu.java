@@ -115,7 +115,7 @@ public final class Menu extends JFrame {
 		contentPane.add(buttonIngresarAlumno, "cell 2 0");
 
 		//---- buttonReportes ----
-		buttonReportes.setText("REPORTES");
+		buttonReportes.setText("Reportes");
 		contentPane.add(buttonReportes, "cell 0 1");
 		pack();
 		setLocationRelativeTo(null);
