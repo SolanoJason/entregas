@@ -641,6 +641,7 @@ public final class IngresarAlumno extends JDialog {
 	@Override
 	public void dispose() {
 		padre.setExtendedState(NORMAL);
+                padre.setVisible(true);
 		super.dispose();
 	}
 

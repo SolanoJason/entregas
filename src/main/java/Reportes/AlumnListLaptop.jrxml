@@ -1,170 +1,395 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="40375527-073e-456e-8694-1090e0fc95db">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f2aa9124-2724-4a05-926b-49eb30f6b3e9">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="facultad" class="java.lang.String"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#0088FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#E6F3FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F8FCFF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#0088FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#E6F3FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F8FCFF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TH" mode="Opaque" backcolor="#0088FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_CH" mode="Opaque" backcolor="#E6F3FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F8FCFF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 7">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TH" mode="Opaque" backcolor="#0088FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_CH" mode="Opaque" backcolor="#E6F3FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F8FCFF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 8">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_TH" mode="Opaque" backcolor="#0088FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_CH" mode="Opaque" backcolor="#E6F3FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F8FCFF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 9">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9_TH" mode="Opaque" backcolor="#0088FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9_CH" mode="Opaque" backcolor="#E6F3FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10_TH" mode="Opaque" backcolor="#0088FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10_CH" mode="Opaque" backcolor="#E6F3FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F8FCFF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="31efd0de-794f-4132-b577-f86eb28dfd3a">
+		<parameter name="escuela" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select codigo as Codigo, concat_ws(" ",apellidos,nombres) as Estudiante, escuela as Escuela,
+case when ns_chip = 'No entregado' then '--' else ns_chip end as 'Serie del chip',
+IFNULL(date(fecha_entrega_chip), "--") as 'Fecha entrega Chip',
+case when usuario_entrega_chip = 'No entregado' then '--' else usuario_entrega_chip end as 'Usuario entrega Chip',
+case when ns_laptop = 'No entregado' then '--' else ns_laptop end as 'Serie del Laptop',
+IFNULL(date(fecha_entrega_laptop), "--") as 'Fecha entrega Laptop',
+ case when usuario_entrega_laptop = 'No entregado' then '--' else usuario_entrega_laptop end as 'Usuario entrega Laptop'
+from mostar_todo  where escuela = $P{escuela} and ns_laptop='No entregado' order by 2;]]>
+		</queryString>
+		<field name="Codigo" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="Estudiante" class="java.lang.String"/>
+		<field name="Escuela" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="Serie del chip" class="java.lang.String"/>
+		<field name="Fecha entrega Chip" class="java.lang.String"/>
+		<field name="Usuario entrega Chip" class="java.lang.String"/>
+		<field name="Serie del Laptop" class="java.lang.String"/>
+		<field name="Fecha entrega Laptop" class="java.lang.String"/>
+		<field name="Usuario entrega Laptop" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="nomesc" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[select * from MOSTRAR where facultad like '%' and laptop='NO';]]>
+		<![CDATA[select 1;]]>
 	</queryString>
-	<field name="DNI" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="NOMBRES" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="APELLIDOS" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="DIRECCIÓN" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="CODIGO" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="ESCUELA" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="FACULTAD" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="CHIP" class="java.lang.String"/>
-	<field name="LAPTOP" class="java.lang.String"/>
-	<field name="FECHA_CHIP" class="java.lang.String"/>
-	<field name="FECHA_LAPTOP" class="java.lang.String"/>
-	<field name="PERSONA_CHIP" class="java.lang.String"/>
-	<field name="PERSONA_LAPTOP" class="java.lang.String"/>
+	<field name="1" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="79" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="802" height="79" uuid="d8ead1e7-ec37-4738-ac67-7aba1ce0b68c"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="24" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Reporte de alumnos vulnerables que falta entregar el LAPTOP]]></text>
-			</staticText>
-		</band>
-	</title>
 	<pageHeader>
-		<band height="49" splitType="Stretch">
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="412" y="0" width="100" height="20" uuid="24a246bd-f360-4183-8f77-17e1295ec804"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="312" y="0" width="100" height="20" uuid="6a1b5bff-4d3c-47c1-b2ab-79bdc5e8fb0a"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Fecha de emision:]]></text>
-			</staticText>
+		<band height="24" splitType="Stretch">
 			<textField>
-				<reportElement x="412" y="20" width="100" height="20" uuid="51ecdf40-1fe2-4ec6-a013-d5215938df6a"/>
-				<textFieldExpression><![CDATA[$P{facultad}]]></textFieldExpression>
+				<reportElement x="0" y="0" width="802" height="22" uuid="346d168a-fa88-40c3-b810-cfd0f9a92476"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Estudiantes de la Escuela de: "+$P{nomesc}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="312" y="20" width="100" height="20" uuid="15c8bbaf-d1c9-4ba9-ac68-8489cbcfb7c3"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Facultad:]]></text>
-			</staticText>
 		</band>
 	</pageHeader>
-	<columnHeader>
-		<band height="61" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="64" height="20" uuid="11f6f944-04f5-4831-8f45-8a8cc73e9f75"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[DNI]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="64" y="0" width="60" height="20" uuid="73688593-78fb-4255-aea3-59b2e11ca539"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[NOMBRES]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="134" y="0" width="85" height="20" uuid="6c4c3c0e-61ca-4b58-87f0-7e81140cb168"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[APELLIDOS]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="332" y="0" width="100" height="20" uuid="5788d964-bd0d-499f-ac31-9dface5112c9"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[DIRECCIÓN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="470" y="0" width="108" height="20" uuid="1f64804b-af50-420a-9239-4cee34cc6245"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[ESCUELA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="234" y="0" width="78" height="20" uuid="ccdcbd23-5f23-44ea-8787-e958dac7955b"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[CODIGO]]></text>
-			</staticText>
-			<line>
-				<reportElement x="0" y="47" width="802" height="1" uuid="52d824ef-d8db-4b9b-b6f6-8d47bc486059"/>
-			</line>
-			<staticText>
-				<reportElement x="601" y="2" width="48" height="20" uuid="1776f0a6-154e-4bec-a9bd-13ff4b30af09"/>
-				<text><![CDATA[CHIP]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="649" y="2" width="100" height="20" uuid="ea0c22b9-75d5-4807-aaa3-85c64e65d09e"/>
-				<text><![CDATA[FECHA_CHIP]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
 	<detail>
-		<band height="23" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="64" height="20" uuid="ef84e2bf-450c-47e6-a6e3-d3155e649d09"/>
-				<textFieldExpression><![CDATA[$F{DNI}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="64" y="0" width="60" height="20" uuid="211c0fcf-b310-4049-900c-40111fc77d9e"/>
-				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="134" y="1" width="85" height="20" uuid="053ebce6-c604-46c2-9701-b9ff075e9648"/>
-				<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="332" y="0" width="100" height="20" uuid="b5d67785-6843-4a07-a244-932e7f8ac3b1"/>
-				<textFieldExpression><![CDATA[$F{DIRECCIÓN}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="470" y="0" width="108" height="20" uuid="d49301d2-1745-4f79-8916-26b1894a517e"/>
-				<textFieldExpression><![CDATA[$F{ESCUELA}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="234" y="0" width="78" height="20" uuid="2aaf0d82-af8c-4260-808b-e03928541eee"/>
-				<textFieldExpression><![CDATA[$F{CODIGO}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="0" y="20" width="802" height="1" uuid="3016c19e-ca06-449f-91e2-a4faf90ed8f9"/>
-			</line>
-			<textField>
-				<reportElement x="601" y="1" width="48" height="20" uuid="3b70e292-4745-4544-aaf7-3a3fc42ff5b0"/>
-				<textFieldExpression><![CDATA[$F{CHIP}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="649" y="3" width="100" height="20" uuid="115c0bb2-7a0f-44b3-84c3-f70f6a281702"/>
-				<textFieldExpression><![CDATA[$F{FECHA_CHIP}]]></textFieldExpression>
-			</textField>
+		<band height="52" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 10" style="table 10" stretchType="RelativeToBandHeight" x="173" y="0" width="450" height="50" uuid="334b2fd5-2552-460e-8fcc-cb7e583662c8"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="284c7c71-165f-4a61-af49-576966a8f7d2">
+						<datasetParameter name="escuela">
+							<datasetParameterExpression><![CDATA[$P{nomesc}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="ce1a59a9-5128-4055-8800-5465b1085953">
+						<jr:columnHeader style="table 10_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="ee6810f3-4304-4d3b-9156-3d0595e10806"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Codigo]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 10_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="ff974103-2f0c-491a-80bb-c3f6da815469"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{Codigo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="125" uuid="21ab169d-a17b-4d1d-9c12-741dbcd0da12">
+						<jr:columnHeader style="table 10_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="125" height="30" uuid="2f8c3546-9049-47e9-aba9-0c13d273d979"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Estudiante]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 10_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="125" height="20" uuid="87f2bb02-028d-4576-9885-a2c6425f1b6f"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{Estudiante}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="f9494e74-9e67-47be-a7e2-f5849ec03120">
+						<jr:columnHeader style="table 10_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="33582605-be07-4f3b-b0fc-93035f5dea22"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Serie del Chip]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 10_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="29e11d95-3f53-4de2-ad47-b0ae3c0b98f6"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{Serie del chip}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="5892a155-f8ba-46ac-9085-059b4497af7d">
+						<jr:columnHeader style="table 10_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="25538d67-5d09-4d01-b54b-dd5b2e178800"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Fecha entrega Chip]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 10_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="8bfdd1af-ee42-41c5-a843-d038054d9f63"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{Fecha entrega Chip}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="5cbf0f37-dd68-4687-82c4-52baaef85901">
+						<jr:columnHeader style="table 10_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="ce58aa28-84c0-418d-91d1-2ce3c38c433e"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Usuario entrega Chip]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 10_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="993fb9b2-1930-4f1a-82bc-e5483dec2a5a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{Usuario entrega Chip}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</detail>
-	<pageFooter>
-		<band height="54" splitType="Stretch">
-			<textField>
-				<reportElement x="332" y="14" width="80" height="20" uuid="c440813c-7d2f-4bdf-8486-fbedf4fae69f"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement x="412" y="14" width="40" height="20" uuid="565bbbc2-f16d-46a2-9b92-0cd79f2a67c8"/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageFooter>
 </jasperReport>

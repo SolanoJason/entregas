@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="69b4f284-1128-4eca-9835-e7d11be97645">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="escuelas" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from escuela where nombre in ($P!{escuelas}) order by nombre;]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="facultad_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="119" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="702" y="99" width="100" height="20" uuid="f94c4124-6af1-4edf-8f42-3fbec41129d7"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="602" y="99" width="100" height="20" uuid="1df2cb6d-87b1-42af-bdc2-eafff12b556c"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Fecha de emision:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="801" height="79" uuid="d523e5de-de59-4ef8-bda0-30381abdf71c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $P{SUBREPORT_DIR}.equalsIgnoreCase( "AlumnList.jasper" ) ? "Alumnos vulnerables" : ( $P{SUBREPORT_DIR}.equalsIgnoreCase( "AlumnListChip.jasper" ) ? "Alumnos que no han recibido chips" : ( $P{SUBREPORT_DIR}.equalsIgnoreCase( "AlumnListLaptop.jasper" ) ? "Alumnos vulnerables que no han recibido laptop" : ( $P{SUBREPORT_DIR}.equalsIgnoreCase( "AlumnListFaltanAmbos.jasper" ) ? "Alumnos vulnerables que no han recibido ni chip ni laptop" : "Alumnos vulnerables que han recibido chip y laptop" ) ) ) )]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="215" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="801" height="215" uuid="4d19d960-8e51-4295-a564-5225187299f1"/>
+				<subreportParameter name="nomesc">
+					<subreportParameterExpression><![CDATA[$F{nombre}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["D:\\Documents\\NetBeansProjects\\entregas\\src\\main\\java\\Reportes\\"+$P{SUBREPORT_DIR}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="339" y="14" width="80" height="20" uuid="bbfcb05e-039f-4b69-8ea8-3de4d0c13c0c"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="419" y="14" width="40" height="20" uuid="e8b6a34f-9331-4671-9e70-865ed0423640"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
