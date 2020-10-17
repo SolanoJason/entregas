@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ea445f3c-a6a1-4596-86ab-bdc863a5de7d">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="1190" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ea445f3c-a6a1-4596-86ab-bdc863a5de7d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="358"/>
+	<style name="style1"/>
 	<subDataset name="New Dataset 1" uuid="d49e80f9-acff-410c-afbb-811b160b3ada">
 		<parameter name="escuelas" class="java.lang.String">
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[SELECT * FROM mydb.reporte_entrega where escuela in ($P!{escuelas}) order by escuela;]]>
+			<![CDATA[select nombre as Escuela,
+@numeroEstudiantes:=(
+select count(*) from estudiante inner join escuela on estudiante.escuela_id=escuela.id where nombre=x.nombre
+) as 'Numero de estudiantes',
+@chipsEntregados:=(
+select count(*) from entrega inner join estudiante on entrega.estudiante_codigo=estudiante.codigo where equipo_entregado='chip' and estudiante.escuela_id=x.id
+) as 'Chips entregados',
+@numeroEstudiantes-@chipsEntregados as 'Chips no entregados',
+concat(round(@chipsEntregados*100/@numeroEstudiantes,1),'%') as 'Chips entregados(%)',
+concat(100-round(@chipsEntregados*100/@numeroEstudiantes,1),'%') as 'Chips no entregados(%)',
+@laptopsEntregados:=(
+select count(*) from entrega inner join estudiante on entrega.estudiante_codigo=estudiante.codigo where equipo_entregado='laptop' and estudiante.escuela_id=x.id
+) as 'Laptops entregados',
+@numeroEstudiantes-@laptopsEntregados as 'Laptops no entregados',
+concat(round(@LaptopsEntregados*100/@numeroEstudiantes,1),'%') as 'Laptops entregados(%)',
+concat(100-round(@LaptopsEntregados*100/@numeroEstudiantes,1),'%') as 'Laptops no entregados(%)'
+from escuela x where x.nombre in ($P!{escuelas}) order by Escuela;]]>
 		</queryString>
-		<field name="Facultad" class="java.lang.String"/>
 		<field name="Escuela" class="java.lang.String"/>
-		<field name="Cantidad_chips" class="java.lang.Long"/>
-		<field name="Cantidad_laptop" class="java.lang.Long"/>
+		<field name="Numero de estudiantes" class="java.lang.Long"/>
+		<field name="Chips entregados" class="java.lang.Long"/>
+		<field name="Chips no entregados" class="java.lang.Double"/>
+		<field name="Chips entregados(%)" class="java.lang.String"/>
+		<field name="Chips no entregados(%)" class="java.lang.String"/>
+		<field name="Laptops entregados" class="java.lang.Long"/>
+		<field name="Laptops no entregados" class="java.lang.Double"/>
+		<field name="Laptops entregados(%)" class="java.lang.String"/>
+		<field name="Laptops no entregados(%)" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="nomesc" class="java.lang.String"/>
 	<queryString>
@@ -22,25 +45,19 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="79" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="802" height="79" uuid="4ab491df-29f2-41b2-a37b-ac309444d895"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="22" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Estadisticas de chips y laptops entregados por las escuelas seleccionadas]]></text>
-			</staticText>
-		</band>
-	</title>
 	<summary>
-		<band height="387" splitType="Stretch">
+		<band height="1150" splitType="Stretch">
 			<stackedBar3DChart>
 				<chart isShowLegend="true" theme="default">
-					<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="802" height="387" uuid="05f63ef5-639a-463e-9c59-f36719244f81"/>
-					<chartTitle/>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="802" height="1150" uuid="05f63ef5-639a-463e-9c59-f36719244f81"/>
+					<chartTitle position="Top" color="#000000">
+						<font size="22" isBold="true"/>
+						<titleExpression><![CDATA["Estadisticas de chips y laptops entregados por las escuelas seleccionadas"]]></titleExpression>
+					</chartTitle>
 					<chartSubtitle/>
-					<chartLegend position="Bottom"/>
+					<chartLegend textColor="#000000" backgroundColor="#FFFFFF" position="Top">
+						<font size="12"/>
+					</chartLegend>
 				</chart>
 				<categoryDataset>
 					<dataset>
@@ -53,23 +70,52 @@
 					</dataset>
 					<categorySeries>
 						<seriesExpression><![CDATA["Chips entregados"]]></seriesExpression>
-						<categoryExpression><![CDATA[$F{Escuela}]]></categoryExpression>
-						<valueExpression><![CDATA[$F{Cantidad_chips}]]></valueExpression>
+						<categoryExpression><![CDATA[$F{Escuela}+" Chips"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{Chips entregados}]]></valueExpression>
+						<labelExpression><![CDATA[$F{Chips entregados(%)}]]></labelExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Chips no entregados"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{Escuela}+" Chips"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{Chips no entregados}]]></valueExpression>
+						<labelExpression><![CDATA[$F{Chips no entregados(%)}]]></labelExpression>
 					</categorySeries>
 					<categorySeries>
 						<seriesExpression><![CDATA["Laptops entregados"]]></seriesExpression>
-						<categoryExpression><![CDATA[$F{Escuela}]]></categoryExpression>
-						<valueExpression><![CDATA[$F{Cantidad_laptop}]]></valueExpression>
+						<categoryExpression><![CDATA[$F{Escuela}+" Laptops"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{Laptops entregados}]]></valueExpression>
+						<labelExpression><![CDATA[$F{Laptops entregados(%)}]]></labelExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Laptops no entregados"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{Escuela}+" Laptops"]]></categoryExpression>
+						<valueExpression><![CDATA[$F{Laptops no entregados}]]></valueExpression>
+						<labelExpression><![CDATA[$F{Laptops no entregados(%)}]]></labelExpression>
 					</categorySeries>
 				</categoryDataset>
-				<bar3DPlot isShowLabels="true">
-					<plot orientation="Horizontal" labelRotation="0.0"/>
+				<bar3DPlot isShowLabels="true" xOffset="10.0" yOffset="15.0">
+					<plot orientation="Horizontal" labelRotation="0.0">
+						<seriesColor seriesOrder="0" color="#7F7FFF"/>
+						<seriesColor seriesOrder="1" color="#FF7F7F"/>
+						<seriesColor seriesOrder="2" color="#3348CF"/>
+						<seriesColor seriesOrder="3" color="#D52929"/>
+					</plot>
 					<itemLabel/>
+					<categoryAxisLabelExpression><![CDATA["Escuelas"]]></categoryAxisLabelExpression>
 					<categoryAxisFormat labelRotation="0.0">
-						<axisFormat/>
+						<axisFormat>
+							<labelFont>
+								<font size="14" isBold="true"/>
+							</labelFont>
+						</axisFormat>
 					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Numero de Estudiantes"]]></valueAxisLabelExpression>
 					<valueAxisFormat>
-						<axisFormat/>
+						<axisFormat>
+							<labelFont>
+								<font size="14" isBold="true"/>
+							</labelFont>
+						</axisFormat>
 					</valueAxisFormat>
 				</bar3DPlot>
 			</stackedBar3DChart>
