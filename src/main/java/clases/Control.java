@@ -6,6 +6,8 @@ import sql.ConexionPool;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.*;
 
 /**
@@ -206,4 +208,32 @@ public enum Control {
 		return cant;
 
 	}
+
+	/**
+	 * Función que configura cual es el siguiente text field a pasar cuando se usa presiona tab o enter
+	 *
+	 * @param origen  JTextField de origen
+	 * @param destino JTextField al cual se va a saltar, el objetivo
+	 */
+	public static void siguienteJComponent(JComponent origen, JComponent destino) {
+		origen.addKeyListener(new KeyListener() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyChar() == KeyEvent.VK_TAB || e.getKeyChar() == KeyEvent.VK_ENTER) {
+					destino.grabFocus();
+				}
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				//Ignorado
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				//Ignorado
+			}
+		});
+	}
+
 }

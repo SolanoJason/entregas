@@ -1,10 +1,5 @@
 package ventanas;
 
-import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.extras.FlatInspector;
-import jiconfont.icons.font_awesome.FontAwesome;
-import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
-import jiconfont.swing.IconFontSwing;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -26,32 +21,6 @@ public final class Menu extends JFrame {
 		initComponents();
 		this.setVisible(true);
 		setActions();
-	}
-
-	/**
-	 * Main que abre el menu y expone las opciones en forma de un 3x3
-	 *
-	 * @param args Los valores CLI (nunca implementados)
-	 */
-	public static void main(String[] args) {
-		setTheme();
-		new Menu().setVisible(true);
-	}
-
-	/**
-	 * Configura el tema a usar, hay muchos muchos para elegir
-	 * <p>
-	 * https://www.formdev.com/flatlaf/
-	 * <p>
-	 * https://www.formdev.com/flatlaf/themes/
-	 *
-	 * @author Arley
-	 */
-	private static void setTheme() {
-		FlatLightLaf.install();
-		FlatInspector.install("ctrl shift alt X");
-		IconFontSwing.register(FontAwesome.getIconFont());
-		IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
 	}
 
 	/**

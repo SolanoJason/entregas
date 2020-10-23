@@ -12,16 +12,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-compileJava {
+tasks.withType(JavaCompile) {
     options.incremental = true
     options.fork = true
     options.failOnError = false
+    options.encoding = 'UTF-8'
 }
 
-// Aca indicamos la ubicaci�n del main
+// Aca indicamos la ubicación del main
 application {
     applicationName = 'Proyecto en aula Programación 3'
-    mainClassName = 'ventanas.Menu'
+    mainClassName = 'ventanas.login.LoginFrame'
 }
 
 group = 'com.grupodos'
@@ -69,7 +70,7 @@ dependencies {
     implementation 'com.miglayout:miglayout-swing:5.2'
 
     //Conector para mysql
-    implementation 'mysql:mysql-connector-java:8.0.21'
+    implementation 'mysql:mysql-connector-java:8.0.22'
     // db pool
     implementation 'com.zaxxer:HikariCP:3.4.5'
     // connector para maria
@@ -78,7 +79,7 @@ dependencies {
     //Guava
     //Porque guava?
     // https://github.com/google/guava/wiki
-    implementation 'com.google.guava:guava:29.0-jre' 
+    implementation 'com.google.guava:guava:30.0-jre'
 
     // Para cargar la librería de Jasper
     implementation 'net.sf.jasperreports:jasperreports:6.15.0'
@@ -100,7 +101,7 @@ setupBuilder {
 //    from shadowJar.outputs
 
 //    bundleJre = 'C:\\Program Files\\AdoptOpenJDK\\jdk-11.0.8.10-hotspot'
-//    mainClass = 'ventanas.Menu'
+//    mainClass = 'ventanas.login.LoginFrame'
 //    mainJar = 'Programa1-1.0.0.1-all.jar'
 
     desktopStarter {
@@ -145,4 +146,9 @@ msi.dependsOn createExe
 
 shadowJar{
 //  minimize()
+}
+
+tasks.named('wrapper') {
+    distributionType = Wrapper.DistributionType.ALL
+
 }

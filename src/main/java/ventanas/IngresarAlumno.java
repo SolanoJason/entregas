@@ -18,6 +18,7 @@ import java.awt.event.KeyListener;
 import java.sql.*;
 import java.util.Objects;
 
+import static clases.Control.siguienteJComponent;
 import static java.awt.Frame.NORMAL;
 
 /**
@@ -115,33 +116,6 @@ public final class IngresarAlumno extends JDialog {
 		llenandoOpciones(opciones);
 
 		setupLayout();
-	}
-
-	/**
-	 * Función que configura cual es el siguiente text field a pasar cuando se usa presiona tab o enter
-	 *
-	 * @param origen  JTextField de origen
-	 * @param destino JTextField al cual se va a saltar, el objetivo
-	 */
-	private static void siguienteTextField(JTextField origen, JTextField destino) {
-		origen.addKeyListener(new KeyListener() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.getKeyChar() == KeyEvent.VK_TAB || e.getKeyChar() == KeyEvent.VK_ENTER) {
-					destino.grabFocus();
-				}
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				//Ignorado
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				//Ignorado
-			}
-		});
 	}
 
 	/**
@@ -256,10 +230,10 @@ public final class IngresarAlumno extends JDialog {
 
 	private void addKeyListeners() {
 		// acción para poder pasar a la casilla apellido
-		siguienteTextField(nombre, apellido);
+		siguienteJComponent(nombre, apellido);
 
 		// acción utilizada para cambiar su edición
-		siguienteTextField(apellido, codigo);
+		siguienteJComponent(apellido, codigo);
 
 		// (released)acción para poder pasar a la casilla dni
 		// (pressed)acción para poder restringir solo números y punto
@@ -669,7 +643,7 @@ public final class IngresarAlumno extends JDialog {
 		};
 		tabla.setModel(modelo);
 
-		String sql = String.format("SELECT * FROM mydb.ESTUDIANTES WHERE %s LIKE '%%%s%%'", columna, buscado.getText());
+		String sql = String.format("SELECT * FROM mydb.estudiante_informacion ei WHERE %s LIKE '%%%s%%'", columna, buscado.getText());
 		try (Connection connection = ConexionPool.getConnection()) {
 			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 				try (ResultSet resultSet = preparedStatement.executeQuery()) {
